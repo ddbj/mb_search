@@ -1,0 +1,67 @@
+/* details, summary設定 */
+details#meta-settings {
+	height    : 0em;
+    text-align: right;
+	transition: .5s;
+}
+details#meta-settings[open] {
+	height: 3.5em;
+}
+summary#meta-summary {
+	display: block;
+}
+/* 吹き出し表示  */
+.balloon4top {
+	position     : relative;
+	display      : inline-block;
+	border       : solid 1px black;
+	padding      : 10px;
+	margin-top   : 1em;
+	fleft: 0%    ;
+	border-radius: 5px;
+}
+.balloon4top:before {
+	content      : "";
+	position     : absolute;
+	top          : -30px;
+	right        : 0%;
+	margin-right : 10em;
+	border       : 15px solid transparent;
+	border-bottom: 15px solid black;
+	z-index      : 1;
+}
+.balloon4top:after {
+	content      : "";
+	position     : absolute;
+	top          : -28px;
+	right        : 0%;
+	margin-right : 10.05em;
+	border       : 14px solid transparent;
+	border-bottom: 14px solid white;
+	z-index      : 2;
+}
+/* ボタン */
+.metadownload-button {
+	border-radius      : 5px;
+	border             : solid 1px #116aff;
+	color              : #116aff;
+	padding            : 0px 5px 3px 5px;
+	cursor             : pointer;
+	margin-right       : 5px;
+	user-select        : none;
+	-moz-user-select   : none;
+	-webkit-user-select: none;
+	-ms-user-select    : none;
+}
+.metadownload-button:hover {
+	background-color: #116aff;
+	color           : white;
+}
+.metadownload-button:active {
+	background-color: #0054c7;
+	color           : white;
+}
+/* その他 */
+.meta-select {
+	margin-right: 1em;
+}

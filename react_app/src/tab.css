@@ -1,0 +1,13 @@
+.tab {
+	margin       : 0.2em;
+	padding      : 0.2em 0.2em 0em 0.2em;
+	border       : solid 1px gray;
+	color        : gray;
+	cursor       : pointer;
+	z-order      : 1;
+	border-radius: 5px 5px 0px 0px;
+}
+
+.selectedTab {
+	border-bottom-color: white;
+}

@@ -1,0 +1,2 @@
+URL=192.168.1.5:9200
+INDEX=mb-project2

@@ -1,0 +1,73 @@
+/* ダイアログ非表示状態（初期）*/
+.modal-no-display {
+	display: none;
+}
+/* ダイアログ */
+.modal-popup {
+	position     : absolute;
+	background   : white;
+	top          : 50%;
+	left         : 50%;
+	width        : 90%;
+	min-height   : 90%;
+	max-height   : 90%;
+	transform    : translate(-50%, -50%);
+	border-radius: 10px;
+	padding      : 1em;
+	z-index      : 1;
+	overflow     : auto;
+}
+/* ダイアログのバックグランド */
+.modal-background {
+	position  : fixed;
+	overflow  : hidden;
+	background: radial-gradient(circle at 50% 50%,
+	                            rgba(0, 0, 0, 0.90),
+	                            rgba(0, 0, 0, 0.70));
+	top       : 0;
+	right     : 0;
+	bottom    : 0;
+	left      : 0;
+	z-index   : 1;
+}
+/* バックグランド：OPENアニメーション　*/
+.modal-background-open {
+	animation: background-open-animation 0.3s ease;
+}
+@keyframes background-open-animation { /* フェードイン */
+	  0% { opacity: 0 }
+	100% { opacity: 1 }
+}
+/* バックグランド：CLOSEアニメーション */
+.modal-background-close {
+	bottom   : 100%;
+	animation: background-close-animation 0.3s ease;
+}
+@keyframes background-close-animation { /* フェードイン */
+	  0% { opacity: 1; bottom: 0 }
+	100% { opacity: 0; bottom: 0 }
+}
+
+/* ダイアログのタイトル */
+.modal-popup-title {
+	display        : flex;
+	justify-content: space-between;
+}
+
+/* 閉じるボタン */
+.modal-popup-close-button {
+	cursor       : pointer;
+	margin-left  : 1em;
+	border-radius: 5px;
+	border       : solid 1px black;
+	padding      : 4px;
+	font-size    : small;
+}
+.modal-popup-close-button:hover {
+	background-color: black;
+	color           : white;
+}
+/* ダイアログ内のコンテンツ */
+.modal-popup-content {
+	overflow: auto;
+}

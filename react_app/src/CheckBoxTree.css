@@ -1,0 +1,41 @@
+/* 開閉ボタン */
+.checkbox-tree-switch {
+	cursor: pointer;
+}
+.checkbox-tree-switch:hover {
+	background-color: gray;
+	color           : white;
+	border-radius   : 3px;
+}
+/* リーフノード レイアウト調整用（開閉ボタンが無い分、1文字押し下げる） */
+.checkbox-tree-no-switch {
+	display: inline-block;
+	width  : 1em;
+}
+/* 子ノードのインデント */
+.checkbox-tree-indent {
+	margin-left: 1em;
+}
+/* 閉じた状態 */
+.checkbox-tree-collapse {
+	display: none;
+}
+/* 開いた状態 */
+.checkbox-tree-expand {
+	display: block;
+}
+/* 選択が混在している親ノードの状態 */
+.checkbox-tree-check-half {
+	opacity: 0.5;
+}
+/* チェックボックス */
+.taxonomy_check {
+	cursor: pointer;
+}
+/* ラベル */
+.checkbox-tree-label {
+	cursor: pointer;
+}
+.checkbox-tree-label:hover {
+	font-weight: 600;
+}
