@@ -9,13 +9,13 @@
   - REACT_APP_URL_TO_TAXONOMY
     - taxonomyデータを取得するためのURL。cur=http://192.168.1.5:9200/mb-project2/_search
 
-- mb-project.sh
+- data/mb-project.sh
   - URL
     - elasticsearchへの「IPアドレス:ポート番号」。cur=192.168.1.5:9200
   - INDEX
     - elasticsearch上の対象インデックス。cur=mb-project2
 
-- CompressedDownload.php
+- download/CompressedDownload.php
   - $DOCUMENT_ROOT
     - 修正必須。このフォルダ以下にdownloadとtmpフォルダを作成する。downloadにはダウンロードファイルが格納されている想定。def=/var/www/html/mb
   - $ROOT_DIR
