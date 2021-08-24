@@ -39,9 +39,9 @@
   - $DOCUMENT_ROOT
     - 修正必須。このフォルダ以下にdownloadとtmpフォルダを作成する。downloadにはダウンロードファイルが格納されている想定。def=/var/www/html/mb
   - $ROOT_DIR
-    オプション。ダウンロードファイルが置かれている場所。def=$DOCUMENT_ROOT/download
+    - オプション。ダウンロードファイルが置かれている場所。def=$DOCUMENT_ROOT/download
   - $TMP_DIR
-    オプション。zipファイルを作成する一時ディレクトリ。def=$DOCUMENT_ROOT/tmp
+    - オプション。zipファイルを作成する一時ディレクトリ。def=$DOCUMENT_ROOT/tmp
 
 
 ## webからアクセス
