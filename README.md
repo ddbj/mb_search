@@ -1,3 +1,12 @@
+# 内容
+
+- data
+  - elasticsearchへ登録するjsonデータ
+- download
+  - 圧縮ファイル群をダウンロードするphpスクリプト
+- react_app
+  - 検索プログラム
+
 # セッティング
 
 ## 修正箇所
