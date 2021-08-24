@@ -7,11 +7,11 @@
 ```
 
 ## 設置
-生成されたbuildフォルダ、data/mb-project.*、download/CompressedDownload.phpをサーバ上へコピー。
-buildフォルダは、webからアクセスできるパスへ
-CompressedDownload.phpはbuildフォルダへ
-CompressedDownload.phpの$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。
-所有者、パーミッションを適切に設定
+- 生成されたbuildフォルダ、data/mb-project.*、download/CompressedDownload.phpをサーバ上へコピー。
+- buildフォルダは、webからアクセスできるパスへ
+- CompressedDownload.phpはbuildフォルダへ
+- CompressedDownload.phpの$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。
+- 所有者、パーミッションを適切に設定
 
 ## データ登録
 ```
