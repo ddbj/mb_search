@@ -1,25 +1,5 @@
 # セッティング
 
-## reactのコンパイル
-```
-> cd react_app
-> npm run build
-```
-
-## 設置
-- 生成されたbuildフォルダ、data/mb-project.*、download/CompressedDownload.phpをサーバ上へコピー。
-- buildフォルダは、webからアクセスできるパスへ
-- CompressedDownload.phpはbuildフォルダへ
-- CompressedDownload.phpの$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。
-- 所有者、パーミッションを適切に設定
-
-## データ登録
-```
-> sh mb-project.del.sh (既に登録済みなら)
-> sh mb-project.schema.sh
-> sh mb-project.regist.sh
-```
-
 ## 修正箇所
 - react_app/.env
   - REACT_APP_URL_TO_ELASTICSEARCH
@@ -43,6 +23,25 @@
   - $TMP_DIR
     - オプション。zipファイルを作成する一時ディレクトリ。def=$DOCUMENT_ROOT/tmp
 
+## reactのコンパイル
+```
+> cd react_app
+> npm run build
+```
+
+## 設置
+- 生成されたbuildフォルダ、data/mb-project.*、download/CompressedDownload.phpをサーバ上へコピー。
+- buildフォルダは、webからアクセスできるパスへ
+- CompressedDownload.phpはbuildフォルダへ
+- CompressedDownload.phpの$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。
+- 所有者、パーミッションを適切に設定
+
+## データ登録
+```
+> sh mb-project.del.sh (既に登録済みなら)
+> sh mb-project.schema.sh
+> sh mb-project.regist.sh
+```
 
 ## webからアクセス
 
