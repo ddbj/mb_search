@@ -32,6 +32,14 @@
   - $TMP_DIR
     - オプション。zipファイルを作成する一時ディレクトリ。def=$DOCUMENT_ROOT/tmp
 
+## 設置の流れ
+- react_appをコンパイルして、buildフォルダを生成する。
+- 上記buildフォルダ、data/、download/CompressedDownload.phpをサーバ上へ置く。
+- buildフォルダをwebからアクセスできる場所へ移動。（ここでは/var/www/html/mb/を想定）
+- CompressedDownload.phpをbuildフォルダ以下へ移動。（同様に/var/www/html/mb/を想定）
+- CompressedDownload.php内の$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。（/var/www/html/mb/download/, /var/www/html/mb/tmp/を想定）
+- 各ファイルの所有者、パーミッションを設定する。
+
 ## reactのコンパイル
 ```
 > cd react_app
@@ -39,17 +47,10 @@
 > mv build /var/www/html/mb/
 ```
 
-## 設置
-- 生成されたbuildフォルダ、data/、download/CompressedDownload.phpをサーバ上へコピー。
-- buildフォルダは、webからアクセスできるパスへ
-- CompressedDownload.phpはbuildフォルダへ
-- CompressedDownload.phpの$ROOT_DIR, $TMP_DIRのフォルダを作成しておく。
-- 所有者、パーミッションを適切に設定
-
 ## CompressedDownload.phpの配置
 ```
-> vi CompressedDownload.php
-> mv CompressedDownload.php /var/www/html/mb_search/
+> vi CompressedDownload.php # 必要なら$DOCUMENT_ROOT, $ROOT_DIR, $TMP_DIRを変更
+> mv CompressedDownload.php /var/www/html/mb/
 > cd /var/www/html/mb/
 > mkdir download tmp
 ```
@@ -57,6 +58,7 @@
 ## データ登録
 ```
 > cd data
+> vi mb-project.sh # elasticsearchのURL、及びインデックスを設定
 > sh mb-project.del.sh (既に登録済みなら)
 > sh mb-project.schema.sh
 > sh mb-project.regist.sh
