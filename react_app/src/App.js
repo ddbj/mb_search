@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {DataSearch,ReactiveBase,ReactiveList,ToggleButton,ResultList,MultiList,SelectedFilters} from '@appbaseio/reactivesearch';
+import {DataSearch,ReactiveBase,ReactiveList,ResultList,MultiList,SingleList} from '@appbaseio/reactivesearch';
 
 import MetaDownload from './MetaDownload.js';
 import TreeOnPopup  from './TreeOnPopup.js';
@@ -7,7 +7,25 @@ import TreeOnPopup  from './TreeOnPopup.js';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/8/23
+Last-Update: 2021/8/28
+ver0.91 File, Project検索の切り替えに対応
+        表示件数切り替えを追加
+
+ver0.9 新データモデルに対応
+
+やること
+・選択数と一緒に、対象ファイル数も表示する -> light
+・データ構造の修正(データ構造が確定してからにする) -> middle
+・samplesの選択が消える問題(componentDidUpdateは使えない) -> heavy
+
+問題点
+・selectedの切り替え
+ -> ファイルやメタデータの保持方法次第で変わってしまう。
+
+・ダウンロードファイルの切り替え
+ -> Project単位だと、選択時だとファイルが存在しないケースがある。大分挙動がわかりづらい。
+
+・labelをtrの外に置かなきゃいけない問題 -> light
 */
 
 
@@ -25,11 +43,17 @@ class App extends Component
 	popupTree    = null;
 	// 選択されたデータ
 	targetList = {};
+	// 現在、File/Projectのどちらが選択されているか
+	handledType = "project";
 
 	constructor(props)
 	{
 		super(props);
-		this.state = { count: 0 };
+
+		// state
+		this.state = { count: 0, show_count: 5 };
+
+		// bind
 		this.reflectSelectedCount = this.reflectSelectedCount.bind(this)
 		this.selectAllCheckbox    = this.selectAllCheckbox.bind(this);
 		this.deselectAllCheckbox  = this.deselectAllCheckbox.bind(this);
@@ -38,21 +62,83 @@ class App extends Component
 		this.doDownload           = this.doDownload.bind(this);
 		this.saveChecked          = this.saveChecked.bind(this);
 		this.reflectCheckboxes    = this.reflectCheckboxes.bind(this);
+		this.switch2File          = this.switch2File.bind(this);
+		this.switch2Project       = this.switch2Project.bind(this);
+		this.changeShowCount      = this.changeShowCount.bind(this);
 
+		// init variables
 		this.popupTree = React.createRef();
+
+		this.targetList["project"] = {};
+		this.targetList["file"]    = {};
+	}
+
+	/*
+	render後に自動で呼ばれるメソッド
+	*/
+	componentDidMount()
+	{
+		document.getElementById("show_count_5").checked = true;
+	}
+
+	componentDidUpdate()
+	{
+		console.log("abc");
 	}
 
 // ダウンロード対象のチェックボックス処理 /////////////////////
+	/*
+	現在選択されているフィルター一覧を取得する
+	className string 対象フィルタのMultiListへ渡したclassName
+	*/
+	getFilterChoices(className)
+	{
+		let choices = [];
+		let array = document.getElementsByClassName(className)[0].getElementsByTagName("input");
+		for(let i = 0; i < array.length; i ++){
+			if(array[i].checked)
+				choices.push(array[i].value);
+		}
+		if(choices.length === 0){ // 一つも選択されていなければ、全選択肢を返す
+			for(let i = 0; i < array.length; i ++)
+				choices.push(array[i].value);
+		}
+		return choices;
+	}
 	/*
 	ダウンロード用チェックボックスの選択状態を保存する。
 	e event イベント発動時のイベントオブジェクト
 	*/
 	saveChecked(e)
 	{
-		if(e.target.checked)
-			this.targetList[e.target.id] = e.target;
-		else
-			delete this.targetList[e.target.id];
+		let instruments = this.getFilterChoices("instruments");
+		let formats     = this.getFilterChoices("files_format");
+
+		if(e.target.checked) {
+			this.targetList[this.handledType][e.target.id] = {};
+			// domを保存
+			this.targetList[this.handledType][e.target.id]["target"] = e.target;
+			let json = JSON.parse(e.target.value);
+
+			// 選択時の対象ファイルを保存
+			let files = [];
+			for(let i = 0; i < json.files.length; i ++){
+				if(instruments.includes(json.files[i].instrument) && formats.includes(json.files[i].file_format))
+					files.push(json.files[i].filename);
+			}
+			this.targetList[this.handledType][e.target.id]["files"] = files;
+
+			// 選択時のmeta情報を保存
+			let meta = {};
+			meta.id            = json.id;
+			meta.project       = json.project;
+			meta.project_id    = json.project_id;
+			meta.project_label = json.project_label;
+			meta.description   = json.description;
+			this.targetList[this.handledType][e.target.id]["meta"] = meta;
+		} else
+			delete this.targetList[this.handledType][e.target.id];
+		this.reflectSelectedCount();
 	}
 	/*
 	ページの表示状態が変わったとき、以前のチェック状態を戻す。
@@ -62,7 +148,7 @@ class App extends Component
 	{
 		let targets = document.getElementsByName("download_check");
 		for(let i = 0; i < targets.length; i ++){
-			if(targets[i].id in this.targetList)
+			if(targets[i].id in this.targetList[this.handledType])
 				targets[i].checked = true;
 		}
 	}
@@ -72,7 +158,7 @@ class App extends Component
 	*/
 	reflectSelectedCount(e)
 	{
-		let cur = this.state.count;
+/*		let cur = this.state.count;
 		if(e.target.checked)
 			cur ++;
 		else
@@ -81,6 +167,8 @@ class App extends Component
 		this.setState({count:cur})
 
 		this.saveChecked(e);
+*/
+		this.setState({count:Object.keys(this.targetList[this.handledType]).length})
 	}
 
 // データダウンロード系 //////////////////////////////////////
@@ -105,17 +193,18 @@ class App extends Component
 	*/
 	setAllCheckbox(flag)
 	{
-		let count = 0;
+//		let count = 0;
 		let targets = document.getElementsByName("download_check");
 		for(let i = 0; i < targets.length; i ++){
-			if(targets[i].checked != flag){
+			if(targets[i].checked !== flag){
 				targets[i].checked = flag;
-				count += targets[i].checked  ? 1 : -1;
+//				count += targets[i].checked  ? 1 : -1;
 				let event = {"target": targets[i]};
 				this.saveChecked(event);
 			}
 		}
-		this.setState({count:this.state.count+count});
+		this.reflectSelectedCount();
+//		this.setState({count:this.state.count+count});
 	}
 	/*
 	ダウンロードの実行
@@ -123,8 +212,8 @@ class App extends Component
 	*/
 	doDownload(e)
 	{
-		let keys = Object.keys(this.targetList);
-		if(keys.length == 0){
+		let keys = Object.keys(this.targetList[this.handledType]);
+		if(keys.length === 0){
 			alert("Not selected.");
 			return;
 		}
@@ -138,8 +227,8 @@ class App extends Component
 */
 		let files = [];
 		for(let i = 0; i < keys.length; i ++)
-			files.push(JSON.parse(this.targetList[keys[0]].value).files);
-//			files.push(this.targetList[keys[i]].value);
+			files.push(this.targetList[this.handledType][keys[i]].files.join(","));
+//			files.push(JSON.parse(this.targetList[this.handledType][keys[0]].value).files);
 		let request = "files=" + files.join(",");
 
 		let filename = "metabobank-files.zip";
@@ -150,7 +239,7 @@ class App extends Component
 		}).then((res) => { // 結果取得
 			if(!res.ok)
 				throw new Error(`${res.status} ${res.statusText}`);
-			filename = res.headers.get("content-disposition").split('filename=')[1].replace(/\"/g,'');
+			filename = res.headers.get("content-disposition").split('filename=')[1].replace(/"/g,'');
 			return res.blob();
 		}).then((blob) => { // blob取得
 			const url = URL.createObjectURL(blob);
@@ -185,20 +274,19 @@ class App extends Component
 	*/
 	getMetaDataFunc()
 	{
-		let str = "project,project_id,project_label,description,instruments,files_format,files\n";
-		let keys = Object.keys(this.targetList);
+		let str = "id,project,project_id,project_label,description\n";
+		let keys = Object.keys(this.targetList[this.handledType]);
 		let data = [];
 		data.push(str.split(","));
 		for(let i = 0; i < keys.length; i ++){
-			let json = JSON.parse(this.targetList[keys[i]].value);
+			let json = this.targetList[this.handledType][keys[i]]["meta"];
+//			let json = JSON.parse(this.targetList[this.handledType][keys[i]]["target"].value);
 			let array = [];
-			array.push('"' + json.project + '"');
-			array.push('"' + json.project_id + '"');
+			array.push('"' + json.id            + '"');
+			array.push('"' + json.project       + '"');
+			array.push('"' + json.project_id    + '"');
 			array.push('"' + json.project_label + '"');
-			array.push('"' + json.description + '"');
-			array.push('"' + json.instruments + '"');
-			array.push('"' + json.files_format + '"');
-			array.push('"' + json.files + '"');
+			array.push('"' + json.description   + '"');
 			data.push(array);
 		}
 
@@ -215,6 +303,56 @@ class App extends Component
 		this.popupTree.current.openPopup();
 	}
 
+// File/Project切り替え ////////////////////////////////////
+	switch2File(event)
+	{
+		this.switchFileOrProject("file");
+		this.switchFileProjectClass("switch2File", "switch2Project");
+	}
+	switch2Project(event)
+	{
+		this.switchFileOrProject("project");
+		this.switchFileProjectClass("switch2Project", "switch2File");
+	}
+	switchFileOrProject(value)
+	{
+		this.handledType = value;
+		var buttons = document.getElementsByName("file_or_project");
+		for(var i = 0; i < buttons.length; i ++){
+			if(buttons[i].value === value){
+				var evt = document.createEvent( "MouseEvents" );
+				evt.initEvent( "click", true, true );
+				buttons[i].dispatchEvent( evt );
+			}
+		}
+		this.reflectSelectedCount();
+	}
+	switchFileProjectClass(selected, unselected)
+	{
+		document.getElementById(selected).classList.add("selected-tab");
+		document.getElementById(selected).classList.remove("unselected-tab");
+		document.getElementById(unselected).classList.add("unselected-tab");
+		document.getElementById(unselected).classList.remove("selected-tab");
+	}
+
+// 表示件数 //////////////////////////////////////////////////////
+	/*
+	結果の表示件数を変更する
+	e event クリックされた件数のラジオボタン
+	*/
+	changeShowCount(e)
+	{
+		let count = parseInt(e.target.value);
+		this.setState({show_count:count});
+
+		// 強制検索させるために、samplesの先頭要素をクリックする
+		let a = document.getElementsByName("samples")[0];
+		a.checked = !a.checked;
+		var evt = document.createEvent( "MouseEvents" );
+		evt.initEvent( "click", true, true );
+		a.dispatchEvent( evt );
+	}
+
 	// 実処理系 /////////////////////////////////////////////////
 	/*
 	描画
@@ -222,7 +360,7 @@ class App extends Component
 	render() {
 		return ( 
 			<ReactiveBase
-//				app = "mb-project2"
+//				app = "mb-project3,mb-file3"
 //				url = "http://192.168.1.5:9200/"
 				app = {process.env.REACT_APP_INDEX_OF_ELASTICSEARCH}
 				url = {process.env.REACT_APP_URL_TO_ELASTICSEARCH}
@@ -234,28 +372,30 @@ class App extends Component
 					<div>Instrument</div>
 					<MultiList
 						componentId  = "instruments"
-						dataField    = "instruments"
+						dataField    = "files.instrument"
 						showCheckbox = {true}
 						showCount    = {true}
 						showSearch   = {false}
 						size         = {10}
 						sortBy       = "asc"
-						react       = {{
-							"and": ["samples","files_format","meta-search"]
+						className    = "instruments"
+						react        = {{
+							"and": ["samples","files_format","meta_search","file_or_project"]
 						}}
 					/>
 	{/* 拡張子のフィルタ */}
 					<div>File Format</div>
 					<MultiList
 						componentId  = "files_format"
-						dataField    = "files_format"
+						dataField    = "files.file_format"
 						showCheckbox = {true}
 						showCount    = {true}
 						showSearch   = {false}
 						size         = {10}
 						sortBy       = "asc"
-						react       = {{
-							"and": ["samples","instruments","meta-search"]
+						className    = "files_format"
+						react        = {{
+							"and": ["samples","instruments","meta_search","file_or_project"]
 						}}
 					/>
 	{/* サンプル種のフィルタ */}
@@ -282,19 +422,16 @@ class App extends Component
 						size        = {1000}
 						sortBy      = "asc"
 						react       = {{
-							"and": ["sample-filter","samples.species","files_format","instruments","meta-search"]
+							"and": ["sample-filter","samples.species","files_format","instruments","meta_search","file_or_project"]
 						}}
-						onChange  = {
-							() => { console.log("a"); }
-						}
 						customQuery={() => {
-							const targets = document.getElementsByName("taxonomy");
+							const targets = document.getElementsByName("samples");
 							let array = [];
 							for(let i = 0; i < targets.length; i ++){
 								if(targets[i].checked)
 									array.push(targets[i].value);
 							}
-							if(array.length == 0){
+							if(array.length === 0){
 								return {};
 							} else {
 								return {
@@ -304,17 +441,17 @@ class App extends Component
 						} }
 						render = {({ loading, error, data, handleChange }) => {
 							if (loading) 
-								return <div>Fetching Data.</div>;
+								return <div className="scroll">Fetching Data.</div>;
 							if (error)
-								return <div>Something went wrong! Error details {JSON.stringify(error)}</div>;
+								return <div className="scroll">Something went wrong! Error details {JSON.stringify(error)}</div>;
 
 							return (
 								<div className="scroll">
 								<table className="filter-table">
-								  {data.map(item => (<label htmlFor={item.key.replace(/\/.*/, '')}>
+								  {data.map(item => (<label key={item.key} htmlFor={item.key}>
 								    <tr className="filter-tr">
-								     <td><input type="checkbox" id={item.key.replace(/\/.*/, '')} value={item.key} name="taxonomy" onChange={handleChange} /></td>
-								     <td className="filter-td">{item.key.replace(/\/.*/, '')}</td>
+								     <td><input type="checkbox" id={item.key} value={item.key} name="samples" onChange={handleChange} /></td>
+								     <td className="filter-td">{item.key}</td>
 								     <td className="right-align">{item.doc_count}</td>
 								    </tr></label>
 								  ))}
@@ -323,27 +460,62 @@ class App extends Component
 					        );
 					    }}
 					/>
-{/*					<div>Show Count</div>
-					<ToggleButton
-						componentId="show-count"
-						data={[
-							{ label: '10', value: 10 },
-							{ label: '20', value: 20 },
-							{ label: '50', value: 50 },
-						]}
-						defaultValue='10'
-						multiSelect={false}
-					/>*/}
+	{/* ファイルかプロジェクトか */}
+					<div className="hidden">
+						<div>File/Project</div>
+						<SingleList
+							componentId ="file_or_project"
+							dataField   ="handling_type"
+							showCheckbox={true}
+							showCount   ={false}
+							showSearch  ={false}
+							defaultValue="project"
+							sortBy      ="asc"
+							customQuery ={() => {
+								var targets = document.getElementsByName("file_or_project");
+								var targetValue = "project";
+								if(2 <= targets.length)
+									if(targets[0].checked)
+										targetValue = "file";
+								return {
+									query: { bool: { must: [{ term:{ handling_type: targetValue } }] } }
+								};
+							}}
+							render     ={({ loading, error, data, handleChange }) => {
+								return (
+									<div>
+									  {data.map(item => (
+									    <div key={item.key}><input type="radio" id={"type_"+item.key} value={item.key} name="file_or_project" onChange={handleChange} />{item.key} {item.doc_count}</div>
+									  ))}
+									</div>
+								);
+							}}
+						/>
+					</div>
+	{/* 表示件数 */}
+					<div className="margin-top">Show Count</div>
+					<div>
+					  <label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} />5</label>
+					  <label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} />10</label>
+					  <label htmlFor="show_count_20"><input type="radio" id="show_count_20" name="show_count" value="20" onChange={this.changeShowCount} />20</label>
+					  <label htmlFor="show_count_50"><input type="radio" id="show_count_50" name="show_count" value="50" onChange={this.changeShowCount} />50</label>
+					</div>
 				</div>
 {/*** 結果コンテンツ ***/}
 				<div className="main-content">
 	{/* metaデータを検索するためのテキストボックス */}
 					<DataSearch
-						componentId = "meta-search"
+						componentId = "meta_search"
 						dataField   = {["project_label","description"]}
 						queryFormat = "and"
-						placeholder = "Search for meta data"
+						placeholder = "Search for Meta Data"
 					/>
+	{/* ProjectとFileの切り替え */}
+					<div className="project-file-style">
+					  <span className="tab selected-tab"   id="switch2Project" onClick={this.switch2Project}>Project</span>
+					  <span className="tab unselected-tab" id="switch2File"    onClick={this.switch2File}>File</span>
+					  <hr className="separation-hr" />
+					</div>
 	{/* 結果を操作するボタン群 */}
 					<div className="separate">
 					  <div>
@@ -363,10 +535,12 @@ class App extends Component
 	{/* 結果の表示 */}
 					<ReactiveList
 						componentId = "list-component"
+						dataField   = "id"
+						sortBy      = "asc"
 						pagination  = {true}
-						size        = {10}
+						size        = {this.state.show_count}
 						react       = {{
-							"and": ["meta-search","instruments","files_format","samples"]
+							"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 						}}
 						onPageChange = {
 							() => { this.reflectCheckboxes(); }
@@ -378,16 +552,16 @@ class App extends Component
 								data.map(item => (
 									<ResultList key = {item._id}>
 									 <ResultList.Content>
-									  <label htmlFor={item.files}>
+									  <label htmlFor={item.id}>
 									  <div className="pointer">
 									   <ResultList.Title
 									     dangerouslySetInnerHTML = {{
-										   __html: "ID:" + item.project_id
+										   __html: "ID:" + item.id
 										 }}
 									   />
 									   <ResultList.Description>
 									    <div>
-									     <input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.files} onChange={this.reflectSelectedCount} /><span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
+									     <input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.id} onChange={this.saveChecked} /><span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
 									    </div>
 									   </ResultList.Description>
 									  </div>
@@ -400,7 +574,7 @@ class App extends Component
 						)}
 					</ReactiveList>
 	{/* ツリー用ポップアップ */}
-					<TreeOnPopup ref={this.popupTree} onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
+					<TreeOnPopup ref={this.popupTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
 
 				</div>
 			</article>

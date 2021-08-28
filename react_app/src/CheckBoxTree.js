@@ -1,6 +1,6 @@
 /*
 Create: 2021/08/16
-Last-Update: 2021/08/22
+Last-Update: 2021/08/28
 
 残り
 バグ
@@ -11,9 +11,7 @@ export default class CheckBoxTree
 	COLLAPSE_STR = "－";
 	LEAF_STR     = "";
 
-	constructor()
-	{
-	}
+//	constructor() {}
 
 	/*
 	treeを作る起点。
@@ -32,7 +30,7 @@ export default class CheckBoxTree
 			for(let i = 0; i < w.length; i ++){
 				w[i] = w[i].replace(/ /g, '_'); // idとして使うため、「 」を「_」に変換する // ※
 // テスト用のため、-ales(目)と-aceae(科)以外は省く
-if(i == w.length-1 || i <= 1 || w[i].endsWith("ales") || w[i].endsWith("aceae")){
+if(i === w.length-1 || i <= 1 || w[i].endsWith("ales") || w[i].endsWith("aceae")){
 				if(!(w[i] in parent))
 					parent[w[i]] = {};
 				parent = parent[w[i]];
@@ -240,10 +238,10 @@ if(i == w.length-1 || i <= 1 || w[i].endsWith("ales") || w[i].endsWith("aceae"))
 			else
 				uncheckedCount ++;
 		}
-		if(children.length == checkedCount){ // 全てチェック
+		if(children.length === checkedCount){ // 全てチェック
 			myself.checked = true;
 			myself.classList.remove("checkbox-tree-check-half");
-		} else if(children.length == uncheckedCount){ // 全て未チェック
+		} else if(children.length === uncheckedCount){ // 全て未チェック
 			myself.checked = false;
 			myself.classList.remove("checkbox-tree-check-half");
 		} else { // 混在
@@ -267,7 +265,7 @@ if(i == w.length-1 || i <= 1 || w[i].endsWith("ales") || w[i].endsWith("aceae"))
 	allCheck(nodeName)
 	{
 		const myself   = document.getElementById("cb_" + nodeName);
-		const children = document.getElementsByClassName("ch_" + nodeName);
+//		const children = document.getElementsByClassName("ch_" + nodeName);
 
 		if(myself.classList.contains("checkbox-tree-check-half") || myself.checked){ // 削除(全てがチェック済み)
 			myself.classList.remove("checkbox-tree-check-half");

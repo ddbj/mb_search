@@ -1,0 +1,29 @@
+#!/bin/sh
+
+usage_exit() {
+	echo "Usage: $0 [-i IP to ElasticSearch] [-p Port for ElasticSearch]" 1>&2
+	exit 1
+}
+
+IP=192.168.1.5
+PORT=9200
+while getopts i:p:h OPT
+do
+	case $OPT in
+		i) IP=$OPTARG
+		   ;;
+		p) PORT=$OPTARG
+		   ;;
+		h) usage_exit
+		   ;;
+		\?) usage_exit
+		   ;;
+	esac
+done
+
+echo ElasticSearch is \"http://${IP}:${PORT}/\".
+
+cd react_app
+eval "echo \"$(cat .env.template)\"" > .env
+cd ../data
+eval "echo \"$(cat mb-project.inc.template)\"" > mb-project.inc

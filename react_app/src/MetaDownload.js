@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 /*
-Last-Update: 2021/08/21
+Last-Update: 2021/08/28
 
 metaデータをダウンロードするためのフォーム、及び機能を実装したコンポーネント
 Usage: <MetaDownload getMetaDataFunc={getData}> />
@@ -158,11 +158,12 @@ class MetaDownload extends Component
 		let e = document.getElementsByName("meta-download-format")[0];
 		let format = e.options[e.selectedIndex].value;
 		switch(format){
-			case 'csv':
-				this.metaDataDelimiter = ',';
-				break;
 			case 'tsv':
 				this.metaDataDelimiter = '	';
+				break;
+			case 'csv':
+			default:
+				this.metaDataDelimiter = ',';
 				break;
 		}
 	}

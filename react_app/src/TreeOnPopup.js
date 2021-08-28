@@ -4,7 +4,7 @@ import CheckBoxTree from './CheckBoxTree.js';
 const checkboxTree = new CheckBoxTree();
 
 /*
-Last-Update: 2021/08/21
+Last-Update: 2021/08/26
 
 taxonomyツリーを表示、選択するポップアップを表示するコンポーネント
 Usage: <TreeOnPopup onReady=idOfButton endpoint=URLtoElasticSearch column=columnName />
@@ -34,6 +34,7 @@ class TreeOnPopup extends Component
 		this.onReady        = props.onReady;
 		this.taxonomyURL    = props.endpoint;
 		this.taxonomyColumn = props.column;
+		this.filterName     = props.filterName;
 
 		this.openPopup            = this.openPopup.bind(this);
 		this.closePopupWithFilter = this.closePopupWithFilter.bind(this);
@@ -82,7 +83,7 @@ class TreeOnPopup extends Component
 			rootElement.removeChild(rootElement.firstChild);
 
 		let   expandNodes = ['Root'];
-		const targets = document.getElementsByName("taxonomy");
+		const targets = document.getElementsByName(this.filterName);
 //		if(this.taxonomyTree == null){ // 初期化
 			let taxonomyTree = [];
 //			for(let i = 0; i < this.taxonomyData.length; i ++)
@@ -118,7 +119,7 @@ class TreeOnPopup extends Component
 	{
 		// 選択状態を反映させる
 		const selectedNodes = checkboxTree.getSelectedNodes();
-		const targets = document.getElementsByName("taxonomy");
+		const targets = document.getElementsByName(this.filterName);
 		for(let i = 1; i < targets.length; i ++){
 			targets[i].checked = selectedNodes.includes(targets[i].id);
 		}

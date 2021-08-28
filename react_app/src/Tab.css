@@ -1,0 +1,27 @@
+.tab {
+	margin       : 0.2em;
+	padding      : 0.2em 0.2em 0em 0.2em;
+	border       : solid 1px gray;
+	color        : gray;
+	z-order      : 1;
+	border-radius: 5px 5px 0px 0px;
+}
+
+.unselected-tab:hover {
+	cursor          : pointer;
+	background-color: gray;
+	color           : white;
+}
+
+.selected-tab {
+	border-bottom-color: white;
+}
+
+
+.project-file-style {
+	margin-top: 1em
+}
+
+.separation-hr {
+	margin: 0px
+}

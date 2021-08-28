@@ -33,6 +33,7 @@ code {
 	border-bottom : 1px solid lightgray;
 	vertical-align: middle;
 	line-height   : 2em;
+	cursor        : pointer;
 }
 .filter-table {
 	margin         : 0px;
@@ -63,6 +64,9 @@ code {
 }
 .hidden {
 	display: none;
+}
+.margin-top {
+	margin-top: 1em;
 }
 .pointer {
 	cursor       : pointer;

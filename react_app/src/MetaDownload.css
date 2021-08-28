@@ -17,7 +17,6 @@ summary#meta-summary {
 	border       : solid 1px black;
 	padding      : 10px;
 	margin-top   : 1em;
-	fleft: 0%    ;
 	border-radius: 5px;
 }
 .balloon4top:before {
