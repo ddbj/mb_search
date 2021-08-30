@@ -34,9 +34,9 @@ Owner is "apache:apache".
   - reactとダウンロードスクリプトをDocumentRootへ設置するスクリプト。-hでヘルプ表示。
 - data/
   - elasticsearchデータ
-- download\
+- download/
   - 圧縮ファイル群をダウンロードするphpスクリプト
-- react_app\
+- react_app/
   - 検索プログラム
 
 # 補足
