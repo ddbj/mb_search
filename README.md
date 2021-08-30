@@ -1,3 +1,13 @@
+# 履歴
+
+- 2021/08/30
+  - File/Project検索への切り替え機能の実装
+  - 複数のファイル情報を追加したProjectデータに対応
+  - 結果選択時の絞り込み情報を元に、対象ファイルを選択
+  - 表示件数の切り替え機能の実装
+  - Zipファイルの作成に失敗した際に、error.zipを返すよう設定
+  - 細かいUIの修正
+
 # 必要なもの
 
 - webサーバ (開発のバージョンはapache2.4.6)
@@ -40,7 +50,7 @@ Owner is "apache:apache".
   - 検索プログラム
 
 # 補足
-- jsonデータは、sparql2elasticsearch_prototype.rbのデータに、**instruments,files_format,files**の属性を追加している。
+- jsonデータは、sparql2elasticsearch_prototype.rbのデータに、**id,files{instruments,files_format,filename,type},handling_type**の属性を追加している。
 - reactivesearchでは、フィルタに使用できる属性は**keyword型**、検索に使用できる属性は**text型**のため、あらかじめマッピングを定義している。
 - ダウンロードファイルは現在1万件以上あり、今後どの程度増えるか分からないため、ファイル名のmd5値の、**/一桁目/二、三桁目/ファイルの実体**、と言うような階層構造を持たせることを想定している。
 - ***フィルタは相互に影響するよう修正。加えて、絞り込み検索もフィルタへ影響を及ぼすよう修正。これによって、チェック済みのフィルタをどう扱うかが問題となる。***
