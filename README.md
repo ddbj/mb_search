@@ -24,7 +24,7 @@ Place the data to "/var/www/html/mb/".
 Owner is "apache:apache".
 ```
 
-- http://IPアドレス/mb/でアクセスを確認する。
+- http\://IPアドレス/mb/でアクセスを確認する。
 
 # 内容
 
