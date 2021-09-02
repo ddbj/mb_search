@@ -4,16 +4,18 @@ import CheckBoxTree from './CheckBoxTree.js';
 const checkboxTree = new CheckBoxTree();
 
 /*
-Last-Update: 2021/08/26
+Last-Update: 2021/09/01
+App_v0.93.jsと同期
 
 taxonomyツリーを表示、選択するポップアップを表示するコンポーネント
 Usage: <TreeOnPopup onReady=idOfButton endpoint=URLtoElasticSearch column=columnName />
+・onUpdate = フィルタを更新するときに呼び出すコールバック関数
 ・onReady = 準備が完了した時に有効にするボタンのID -> コールバック関数に変える
 ・endpoint = taxonomy情報を取得するelasticsearchへのURL
 ・column = taxonomy情報が格納されているelasticsearchのカラム名
+//・filterName = Samplesフィルタタグ名(onUpdateの実装により不要に)
 
 問題点
-・ツリーは常に、フィルターと合わせるかどうか -> 質問
 ・スクロールしない -> できればヘッダは固定にしたい
 */
 class TreeOnPopup extends Component
@@ -23,6 +25,7 @@ class TreeOnPopup extends Component
 //	taxonomyURL = 'http://192.168.1.5:9200/mb-project2/_search';
 	taxonomyURL = ''; // taxonomy情報を取得するためのelasticsearchのエンドポイント。propsを通じてセットされる。
 	onReady     = null; // 準備が完了した際に、有効にするボタンのID（コールバック関数を読んだ方がいい）
+	onUpdate    = null;
 
 	taxonomyData = null; // elasticsearchから直接取得する全taxonomy情報
 
@@ -31,6 +34,7 @@ class TreeOnPopup extends Component
 	{
 		super(props);
 
+		this.onUpdate       = props.onUpdate;
 		this.onReady        = props.onReady;
 		this.taxonomyURL    = props.endpoint;
 		this.taxonomyColumn = props.column;
@@ -118,17 +122,13 @@ class TreeOnPopup extends Component
 	closePopupWithFilter(e)
 	{
 		// 選択状態を反映させる
-		const selectedNodes = checkboxTree.getSelectedNodes();
+/*		const selectedNodes = checkboxTree.getSelectedNodes();
 		const targets = document.getElementsByName(this.filterName);
 		for(let i = 1; i < targets.length; i ++){
 			targets[i].checked = selectedNodes.includes(targets[i].id);
 		}
-
-		// イベントを発火させる
-		targets[0].checked = !(selectedNodes.includes(targets[0].id));
-		const evt = document.createEvent("MouseEvents");
-		evt.initEvent("click", true, true);
-		targets[0].dispatchEvent(evt);
+*/
+		this.onUpdate(checkboxTree.getSelectedNodes());
 
 		this.closePopup(e);
 	}

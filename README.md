@@ -1,6 +1,13 @@
 # 履歴
 
+- 2021/09/02
+  - 変更:react_app/App.js, react_app/TreeOnPopup.js
+  - instrumentやfile formatフィルタを変更したとき、sampleフィルタのチェックが外れてしまう問題を修正
+  - 結果の選択数に加え、ダウンロード対象ファイル数も表示するよう変更
+
 - 2021/08/30
+  - 追加:download/error.zip, data/*, react_app/.env.template, configure, install.sh
+  - 変更:download/CompressedDownload.php, react_app/*
   - File/Project検索への切り替え機能の実装
   - 複数のファイル情報を追加したProjectデータに対応
   - 結果選択時の絞り込み情報を元に、対象ファイルを選択

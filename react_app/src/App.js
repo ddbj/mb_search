@@ -7,16 +7,20 @@ import TreeOnPopup  from './TreeOnPopup.js';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/8/28
+Last-Update: 2021/9/1
+ver0.93 samplesのチェックボックスが、他のフィルタを更新時に消されてしまう問題に対処
+          合わせて、TreeOnPopup.jsも修正
+
+ver0.92 classをキャメルケースから、ハイフン区切りのものに変更
+        細かいレイアウト、バグ修正
+
 ver0.91 File, Project検索の切り替えに対応
         表示件数切り替えを追加
 
 ver0.9 新データモデルに対応
 
 やること
-・選択数と一緒に、対象ファイル数も表示する -> light
 ・データ構造の修正(データ構造が確定してからにする) -> middle
-・samplesの選択が消える問題(componentDidUpdateは使えない) -> heavy
 
 問題点
 ・selectedの切り替え
@@ -25,7 +29,7 @@ ver0.9 新データモデルに対応
 ・ダウンロードファイルの切り替え
  -> Project単位だと、選択時だとファイルが存在しないケースがある。大分挙動がわかりづらい。
 
-・labelをtrの外に置かなきゃいけない問題 -> light
+・labelをtrの外に置かなきゃいけない問題 -> light -> 保留
 */
 
 
@@ -46,25 +50,30 @@ class App extends Component
 	// 現在、File/Projectのどちらが選択されているか
 	handledType = "project";
 
+	sampleFilterArray = [];
+	handleChange = null;
+
 	constructor(props)
 	{
 		super(props);
 
 		// state
-		this.state = { count: 0, show_count: 5 };
+		this.state = { count: 0, file_count: 0, show_count: 5 };
 
 		// bind
-		this.reflectSelectedCount = this.reflectSelectedCount.bind(this)
-		this.selectAllCheckbox    = this.selectAllCheckbox.bind(this);
-		this.deselectAllCheckbox  = this.deselectAllCheckbox.bind(this);
-		this.showMetaSettings     = this.showMetaSettings.bind(this);
-		this.showTree             = this.showTree.bind(this);
-		this.doDownload           = this.doDownload.bind(this);
-		this.saveChecked          = this.saveChecked.bind(this);
-		this.reflectCheckboxes    = this.reflectCheckboxes.bind(this);
-		this.switch2File          = this.switch2File.bind(this);
-		this.switch2Project       = this.switch2Project.bind(this);
-		this.changeShowCount      = this.changeShowCount.bind(this);
+		this.reflectSelectedCount        = this.reflectSelectedCount.bind(this)
+		this.selectAllCheckbox           = this.selectAllCheckbox.bind(this);
+		this.deselectAllCheckbox         = this.deselectAllCheckbox.bind(this);
+		this.showMetaSettings            = this.showMetaSettings.bind(this);
+		this.showTree                    = this.showTree.bind(this);
+		this.doDownload                  = this.doDownload.bind(this);
+		this.saveChecked                 = this.saveChecked.bind(this);
+		this.reflectCheckboxes           = this.reflectCheckboxes.bind(this);
+		this.switch2File                 = this.switch2File.bind(this);
+		this.switch2Project              = this.switch2Project.bind(this);
+		this.changeShowCount             = this.changeShowCount.bind(this);
+		this.changeSampleFilter          = this.changeSampleFilter.bind(this);
+		this.reflectSampleFilterFromTree = this.reflectSampleFilterFromTree.bind(this);
 
 		// init variables
 		this.popupTree = React.createRef();
@@ -78,12 +87,6 @@ class App extends Component
 	*/
 	componentDidMount()
 	{
-		document.getElementById("show_count_5").checked = true;
-	}
-
-	componentDidUpdate()
-	{
-		console.log("abc");
 	}
 
 // ダウンロード対象のチェックボックス処理 /////////////////////
@@ -168,7 +171,13 @@ class App extends Component
 
 		this.saveChecked(e);
 */
-		this.setState({count:Object.keys(this.targetList[this.handledType]).length})
+let fileCount = 0;
+let keys = Object.keys(this.targetList[this.handledType]);
+for(let i = 0; i < keys.length; i ++)
+	fileCount += this.targetList[this.handledType][keys[i]].files.length;
+console.log(fileCount);
+		this.setState({count:Object.keys(this.targetList[this.handledType]).length});
+		this.setState({file_count:fileCount});
 	}
 
 // データダウンロード系 //////////////////////////////////////
@@ -303,6 +312,41 @@ class App extends Component
 		this.popupTree.current.openPopup();
 	}
 
+// sampleフィルタ //////////////////////////////////////////////////////
+	/*
+	sampleがクリックされた時に、選択対象を管理する
+	e event クリックされたフィルタ項目
+	*/
+	changeSampleFilter(e)
+	{
+		if(!this.sampleFilterArray.includes(e.target.value))
+			this.sampleFilterArray.push(e.target.value);
+		else
+			this.sampleFilterArray = this.sampleFilterArray.filter(function( item ) {  return item !== e.target.value; });
+//console.log(this.sampleFilterArray);
+
+		if(this.handleChange)
+			this.handleChange();
+	}
+
+	/*
+	tree上での変更が反映される時に呼ばれるコールバック関数
+	targets array 選択対象のSampleフィルタ項目文字列
+	*/
+	reflectSampleFilterFromTree(targets)
+	{
+		// チェックボックスの状態をセット
+		const checkboxes = document.getElementsByName("samples");
+		for(let i = 0; i < checkboxes.length; i ++){
+			checkboxes[i].checked = targets.includes(checkboxes[i].id);
+		}
+
+		// 検索用配列を更新
+		this.sampleFilterArray = targets.concat();
+		if(this.handleChange)
+			this.handleChange();
+	}
+
 // File/Project切り替え ////////////////////////////////////
 	switch2File(event)
 	{
@@ -345,12 +389,8 @@ class App extends Component
 		let count = parseInt(e.target.value);
 		this.setState({show_count:count});
 
-		// 強制検索させるために、samplesの先頭要素をクリックする
-		let a = document.getElementsByName("samples")[0];
-		a.checked = !a.checked;
-		var evt = document.createEvent( "MouseEvents" );
-		evt.initEvent( "click", true, true );
-		a.dispatchEvent( evt );
+		if(this.handleChange)
+			this.handleChange();
 	}
 
 	// 実処理系 /////////////////////////////////////////////////
@@ -425,13 +465,10 @@ class App extends Component
 							"and": ["sample-filter","samples.species","files_format","instruments","meta_search","file_or_project"]
 						}}
 						customQuery={() => {
-							const targets = document.getElementsByName("samples");
-							let array = [];
-							for(let i = 0; i < targets.length; i ++){
-								if(targets[i].checked)
-									array.push(targets[i].value);
-							}
-							if(array.length === 0){
+							// クラス変数をそのまま渡すとうまく動作しないので、コピーする
+							let array = this.sampleFilterArray.concat()
+
+							if(this.sampleFilterArray.length === 0){
 								return {};
 							} else {
 								return {
@@ -439,18 +476,33 @@ class App extends Component
 								};
 							}
 						} }
-						render = {({ loading, error, data, handleChange }) => {
+						render = {({ loading, error, data, value, handleChange }) => {
 							if (loading) 
 								return <div className="scroll">Fetching Data.</div>;
 							if (error)
 								return <div className="scroll">Something went wrong! Error details {JSON.stringify(error)}</div>;
+
+							// checkedの状態を設定
+							this.handleChange = handleChange;
+							for(let i = 0; i < data.length; i ++){
+								let flag = false;
+								for(let j = 0; j < this.sampleFilterArray.length; j ++){
+									if(this.sampleFilterArray[j] === data[i].key){
+										flag = true;
+										break;
+									}
+								}
+								data[i].checked = flag;
+							}
 
 							return (
 								<div className="scroll">
 								<table className="filter-table">
 								  {data.map(item => (<label key={item.key} htmlFor={item.key}>
 								    <tr className="filter-tr">
-								     <td><input type="checkbox" id={item.key} value={item.key} name="samples" onChange={handleChange} /></td>
+								     <td>
+								      <input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
+								     </td>
 								     <td className="filter-td">{item.key}</td>
 								     <td className="right-align">{item.doc_count}</td>
 								    </tr></label>
@@ -495,7 +547,7 @@ class App extends Component
 	{/* 表示件数 */}
 					<div className="margin-top">Show Count</div>
 					<div>
-					  <label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} />5</label>
+					  <label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} defaultChecked={true} />5</label>
 					  <label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} />10</label>
 					  <label htmlFor="show_count_20"><input type="radio" id="show_count_20" name="show_count" value="20" onChange={this.changeShowCount} />20</label>
 					  <label htmlFor="show_count_50"><input type="radio" id="show_count_50" name="show_count" value="50" onChange={this.changeShowCount} />50</label>
@@ -525,7 +577,7 @@ class App extends Component
 					  <div>
 					    <span className="metadownload-button" onClick={this.showMetaSettings}>DL(Meta)</span>
 					    <span className="metadownload-button" onClick={this.doDownload}      >DL(File)</span>
-					    <span>{this.state.count} <span className="small">selected.</span></span>
+					    <span>{this.state.file_count} <span className="small">file(s)</span>/{this.state.count} <span className="small">selected.</span></span>
 					  </div>
 					</div>
 	{/* Metaダウンロード設定 */}
@@ -574,7 +626,7 @@ class App extends Component
 						)}
 					</ReactiveList>
 	{/* ツリー用ポップアップ */}
-					<TreeOnPopup ref={this.popupTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
+					<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
 
 				</div>
 			</article>
