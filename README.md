@@ -1,7 +1,10 @@
 # 履歴
 
 - 2021/09/09
+  - 追加:express/index.js
+  - 変更 react_app/App.js, react_app/index.css
   - expressに対応
+  - project検索結果にファイル数を、file検索結果にファイルフォーマット表示を追加
 
 - 2021/09/02
   - 変更:react_app/App.js, react_app/TreeOnPopup.js
@@ -38,7 +41,7 @@ ElasticSearch is "http://192.168.1.5:9200/".
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../react_app
 ```
-download/*をwebからアクセスできる場所に置き、.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する。
+- download/*をwebからアクセスできる場所に置き、.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する。
 ```
 > npm install
 > npm run build
