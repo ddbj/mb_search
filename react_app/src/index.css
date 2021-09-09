@@ -21,8 +21,8 @@ code {
 }
 .side-menu {
 	padding  : 1em;
-	width    : 200px;
-	min-width: 200px;
+	width    : 210px;
+	min-width: 210px;
 }
 .filter-td {
 	min-width  : 110px;
@@ -34,6 +34,9 @@ code {
 	vertical-align: middle;
 	line-height   : 2em;
 	cursor        : pointer;
+}
+.filter-tr:hover {
+	color: #116aff;
 }
 .filter-table {
 	margin         : 0px;
@@ -51,13 +54,18 @@ code {
 	display        : flex;
 	justify-content: space-between;
 }
+.separate-compact {
+	display        : flex;
+	justify-content: space-between;
+}
 .scroll {
 	overflow: auto;
 	height  : 300px;
 }
 .right-align {
-	text-align: right;
-	width: 3em;
+	text-align   : right;
+	width        : 3em;
+	padding-right: 0.2em;
 }
 .small {
 	font-size: small;
@@ -75,4 +83,22 @@ code {
 }
 .pointer:hover {
 	background-color: lightgray;
+}
+/*** ŠJ”­—p ***/
+.flex-left {
+	display        : flex;
+	justify-content: flex-start;
+}
+.middle {
+	display: inline;
+	vertical-align: middle;
+}
+.compact {
+	line-height: 1em;
+}
+.under-bar {
+	border-bottom: solid 1px lightgray;
+}
+.box {
+	border: solid 1px black;
 }

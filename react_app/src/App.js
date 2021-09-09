@@ -7,7 +7,10 @@ import TreeOnPopup  from './TreeOnPopup.js';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/9/1
+Last-Update: 2021/9/2
+ver0.94 project検索にて、projectごとのファイル数を表示
+        project検索にて、フィルタによるファイルの選定を無効にする(データモデルが決定するまで今は保留)
+
 ver0.93 samplesのチェックボックスが、他のフィルタを更新時に消されてしまう問題に対処
           合わせて、TreeOnPopup.jsも修正
 
@@ -126,7 +129,8 @@ class App extends Component
 			// 選択時の対象ファイルを保存
 			let files = [];
 			for(let i = 0; i < json.files.length; i ++){
-				if(instruments.includes(json.files[i].instrument) && formats.includes(json.files[i].file_format))
+// ダウンロードファイルはフィルタと関連づけないため、排除しておく
+//				if(instruments.includes(json.files[i].instrument) && formats.includes(json.files[i].file_format))
 					files.push(json.files[i].filename);
 			}
 			this.targetList[this.handledType][e.target.id]["files"] = files;
@@ -175,7 +179,7 @@ let fileCount = 0;
 let keys = Object.keys(this.targetList[this.handledType]);
 for(let i = 0; i < keys.length; i ++)
 	fileCount += this.targetList[this.handledType][keys[i]].files.length;
-console.log(fileCount);
+
 		this.setState({count:Object.keys(this.targetList[this.handledType]).length});
 		this.setState({file_count:fileCount});
 	}
@@ -222,7 +226,8 @@ console.log(fileCount);
 	doDownload(e)
 	{
 		let keys = Object.keys(this.targetList[this.handledType]);
-		if(keys.length === 0){
+//		if(keys.length === 0){
+		if(this.state.file_count === 0){
 			alert("Not selected.");
 			return;
 		}
@@ -495,6 +500,23 @@ console.log(fileCount);
 								data[i].checked = flag;
 							}
 
+{/*							return (
+								<div className="scroll">
+								  {data.map(item => (
+								    <label key={item.key} htmlFor={item.key}>
+								      <div className="separate-compact under-bar">
+								        <div className="flex-left">
+								         <div className="middle">
+								          <input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
+								         </div>
+								         <div className="compact">{item.key}</div>
+								        </div>
+								        <div className="right-align"><span className="middle">{item.doc_count}</span></div>
+								      </div>
+								    </label>
+								  ))}
+								</div>
+							);*/}
 							return (
 								<div className="scroll">
 								<table className="filter-table">
@@ -598,32 +620,42 @@ console.log(fileCount);
 							() => { this.reflectCheckboxes(); }
 						}
 					>
-						{({data, error, loading}) => (
-							<ResultListWrapper>
-							{
-								data.map(item => (
-									<ResultList key = {item._id}>
-									 <ResultList.Content>
-									  <label htmlFor={item.id}>
-									  <div className="pointer">
-									   <ResultList.Title
-									     dangerouslySetInnerHTML = {{
-										   __html: "ID:" + item.id
-										 }}
-									   />
-									   <ResultList.Description>
-									    <div>
-									     <input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.id} onChange={this.saveChecked} /><span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
-									    </div>
-									   </ResultList.Description>
-									  </div>
-									  </label>
-									 </ResultList.Content>
-									</ResultList>
-								))
+						{({data, error, loading}) => {
+							// file数のカウント
+							if(this.handledType === "project"){
+								for(let i = 0; i < data.length; i ++)
+									data[i].file_count = data[i].files.length + " files(0 GB)";
+							} else {
+								for(let i = 0; i < data.length; i ++)
+									data[i].file_count = data[i].files[0].file_format + " (0 GB)";
 							}
-							</ResultListWrapper>
-						)}
+							return (
+								<ResultListWrapper>
+								{
+									data.map(item => (
+										<ResultList key = {item._id}>
+										 <ResultList.Content>
+										  <label htmlFor={item.id}>
+										  <div className="pointer">
+										   <ResultList.Title
+										     dangerouslySetInnerHTML = {{
+											   __html: "<div class=\"separate-compact\"><div>ID:" + item.id + "</div><div><span class=\"small\">" + item.file_count + "</span></div></div>"
+											 }}
+										   />
+										   <ResultList.Description>
+										    <div>
+										     <input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.id} onChange={this.saveChecked} /><span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
+										    </div>
+										   </ResultList.Description>
+										  </div>
+										  </label>
+										 </ResultList.Content>
+										</ResultList>
+									))
+								}
+								</ResultListWrapper>
+							);
+						}}
 					</ReactiveList>
 	{/* ツリー用ポップアップ */}
 					<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />

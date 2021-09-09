@@ -1,5 +1,8 @@
 # 履歴
 
+- 2021/09/09
+  - expressに対応
+
 - 2021/09/02
   - 変更:react_app/App.js, react_app/TreeOnPopup.js
   - instrumentやfile formatフィルタを変更したとき、sampleフィルタのチェックが外れてしまう問題を修正
@@ -21,6 +24,30 @@
 - php 7>= + zipモジュール (開発のバージョンは7.3.29)
 - elasticsearch 7>= (開発のバージョンは7.14.0)
 - npm (開発のバージョンは6.14.13)
+
+# セッティング(for express)
+- mb-project3とmb-file3というインデックスを使用
+- expressサーバのポートは5000
+
+```
+> git clone git@github.com:ddbj/mb_search.git
+> cd mb_search
+> ./configure -i ElasticSearchのIPアドレス(def=192.168.1.5) -p ElasticSearchのポート番号(def=9200)
+ElasticSearch is "http://192.168.1.5:9200/".
+> cd data
+> ./regist.sh # mb-project3とmb-file3のindexへデータを登録
+> cd ../react_app
+```
+download/*をwebからアクセスできる場所に置き、.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する。
+```
+> npm install
+> npm run build
+> cd ../express
+> npm init
+> npm install express --save
+> node index.js
+```
+- http\://IPアドレス:5000/mb/でアクセスを確認する。
 
 # セッティング
 - mb-project3とmb-file3というインデックスを使用
