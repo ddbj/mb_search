@@ -41,7 +41,7 @@ ElasticSearch is "http://192.168.1.5:9200/".
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../download
 ```
-- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する。
+- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http://192.168.1.5/CompressedDownload.php)。
 ```
 > cd ../react_app
 > npm install
