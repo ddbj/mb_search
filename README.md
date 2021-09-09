@@ -42,16 +42,17 @@ ElasticSearch is "http://192.168.1.5:9200/".
 > cd ../download
 ```
 - download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://192.168.1.5/CompressedDownload.php)。
+- webサーバにて、corsの設定を行う
 ```
 > cd ../react_app
 > npm install
 > npm run build
 > cd ../express_server
-> npm init
+> npm init (いろいろ聞かれるが、全てENTERで動く)
 > npm install express --save
 > node index.js
 ```
-- http\://IPアドレス:5000/mb/でアクセスを確認する。
+- http\://IPアドレス:5000/でアクセスを確認する。
 
 # セッティング
 - mb-project3とmb-file3というインデックスを使用
