@@ -1,5 +1,10 @@
 # 履歴
 
+- 2021/09/12
+  - 変更:express_server/index.js, data/regist.sh
+  - expressをcorsに対応
+  - elasticsearchのstatusがyellowになっているのを修正
+
 - 2021/09/09
   - 追加:express_server/index.js
   - 変更 react_app/App.js, react_app/index.css
