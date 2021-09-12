@@ -11,6 +11,10 @@ do
 
 	curl -XPUT "http://${URL}/${INDEX}/?pretty" -H 'Content-Type: application/json' -d'
 {
+  "settings" : {
+      "number_of_shards"   : 1,
+      "number_of_replicas" : 0
+  },
   "mappings": {
     "properties": {
 	"id":               {"type": "keyword"},
