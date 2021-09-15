@@ -33,6 +33,7 @@
 - elasticsearch 7>= (開発のバージョンは7.14.0)
 - npm (開発のバージョンは6.14.13)
 
+
 # セッティング(for express)
 - mb-project3とmb-file3というインデックスを使用
 - expressサーバのポートは5000
@@ -40,14 +41,13 @@
 ```
 > git clone git@github.com:ddbj/mb_search.git
 > cd mb_search
-> ./configure -i ElasticSearchのIPアドレス(def=192.168.1.5) -p ElasticSearchのポート番号(def=9200)
-ElasticSearch is "http://192.168.1.5:9200/".
+> ./configure -i 0.0.0.0 -p 19200 # ElasticSearchのIPアドレス(def=192.168.1.5)とポート番号(def=9200)を設定する。defaultは諏訪さんの開発環境
 > cd data
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../download
 ```
-- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://192.168.1.5/CompressedDownload.php)。
-- webサーバにて、corsの設定を行う
+- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://192.168.1.5/CompressedDownload.php)。 #FIXME
+- webサーバにて、corsの設定を行う #FIXME
 ```
 > cd ../react_app
 > npm install
