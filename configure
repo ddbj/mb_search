@@ -21,14 +21,24 @@ do
 	esac
 done
 
+if [ ${URL2ES: -1} != '/' ]; then
+  URL2ES=`echo ${URL2ES}/`
+fi
+
 echo ElasticSearch is \"${URL2ES}\".
 if [ -n "${URL2RP}" ]; then
+  if [ ${URL2RP: -1} != '/' ]; then
+    URL2RP=`echo ${URL2RP}/`
+  fi
   echo ReverseProxy is \"${URL2RP}\".
 else
-  URL2RP=http://${IP}:${PORT}/
+  URL2RP=${URL2ES}
 fi
 
 cd react_app
 eval "echo \"$(cat .env.template)\"" > .env
+if [ ${URL2ES: -1} = '/' ]; then
+	URL2ES=`echo ${URL2ES/%?/}`
+fi
 cd ../data
 eval "echo \"$(cat mb-project.inc.template)\"" > mb-project.inc
