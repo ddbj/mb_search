@@ -24,7 +24,7 @@ app.use(express.static(path.join(__dirname, '../react_app/build')));
 
 app.post(index, (req, res) => {
   proxy.web(req, res, {
-    target: ase,
+    target: es,
     secure: false
   });
 })
