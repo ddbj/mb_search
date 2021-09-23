@@ -5,7 +5,7 @@ usage_exit() {
 	exit 1
 }
 
-IP=192.168.1.5
+IP=localhost
 PORT=9200
 while getopts i:p:h OPT
 do

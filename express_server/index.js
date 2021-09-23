@@ -1,7 +1,11 @@
 const express = require('express')
 const app = express()
+const httpProxy = require('http-proxy');
+const proxy = httpProxy.createProxyServer({});
 const path = require('path');
 const port = process.env.PORT || 5000
+const index = process.env.INDEX || '/mb-project3,mb-file3/*'
+const es = process.env.ES || 'http://localhost:9200/'
 
 const allowCrossDomain = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', '*');
@@ -18,7 +22,13 @@ if('OPTIONS' === req.method){
 app.use(allowCrossDomain)
 app.use(express.static(path.join(__dirname, '../react_app/build')));
 
-app.get('*', (req, res) => {
+app.post(index, (req, res) => {
+  proxy.web(req, res, {
+    target: ase,
+    secure: false
+  });
+})
+app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, '../react_app/build/index.html'));
 })
 

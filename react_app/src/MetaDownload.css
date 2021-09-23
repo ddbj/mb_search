@@ -15,6 +15,7 @@ summary#meta-summary {
 	position     : relative;
 	display      : inline-block;
 	border       : solid 1px black;
+	margin-right : 2.8em;
 	padding      : 10px;
 	margin-top   : 1em;
 	border-radius: 5px;

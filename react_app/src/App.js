@@ -7,7 +7,9 @@ import TreeOnPopup  from './TreeOnPopup.js';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/9/2
+Last-Update: 2021/9/23
+ver0.95 ElasticSearchのURLを一つに集約
+
 ver0.94 project検索にて、projectごとのファイル数を表示
         project検索にて、フィルタによるファイルの選定を無効にする(データモデルが決定するまで今は保留)
 
@@ -658,7 +660,7 @@ for(let i = 0; i < keys.length; i ++)
 						}}
 					</ReactiveList>
 	{/* ツリー用ポップアップ */}
-					<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
+					<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_ELASTICSEARCH + process.env.REACT_APP_INDEX_OF_ELASTICSEARCH + "/_search"} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
 
 				</div>
 			</article>

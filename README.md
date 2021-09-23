@@ -1,5 +1,13 @@
 # 履歴
 
+- 2021/09/23
+  - 変更:configure, react_app/.env.template, react_app/src/App.js, react_app/src/MetaDownload.css, express_server/index.js
+  - 削除:tab.css
+  - react_appのelasticsearchへのURLの環境変数を一つに集約
+  - MetaDownloadの吹き出しの位置調整
+  - configureにおけるデフォルト値をlocalhostへ変更
+  - expressにおいて、elasticsearchへのアクセスをリバースプロキシするよう修正
+
 - 2021/09/12
   - 変更:express_server/index.js, data/regist.sh
   - expressをcorsに対応
@@ -40,13 +48,13 @@
 ```
 > git clone git@github.com:ddbj/mb_search.git
 > cd mb_search
-> ./configure -i ElasticSearchのIPアドレス(def=192.168.1.5) -p ElasticSearchのポート番号(def=9200)
-ElasticSearch is "http://192.168.1.5:9200/".
+> ./configure -i ElasticSearchのIPアドレス(def=localhost) -p ElasticSearchのポート番号(def=9200)
+ElasticSearch is "http://localhost:9200/".
 > cd data
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../download
 ```
-- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://192.168.1.5/CompressedDownload.php)。
+- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://localhost/CompressedDownload.php)。
 - webサーバにて、corsの設定を行う
 ```
 > cd ../react_app
@@ -55,6 +63,7 @@ ElasticSearch is "http://192.168.1.5:9200/".
 > cd ../express_server
 > npm init (いろいろ聞かれるが、全てENTERで動く)
 > npm install express --save
+> npm install http-proxy --save # expressにelasticsearchのリバースプロキシをさせるなら
 > node index.js
 ```
 - http\://IPアドレス:5000/でアクセスを確認する。
