@@ -1,11 +1,11 @@
 # 履歴
 
 - 2021/09/23
-  - 変更:configure, react_app/.env.template, react_app/src/App.js, react_app/src/MetaDownload.css, express_server/index.js
+  - 変更:configure, react_app/.env.template, react_app/src/App.js, react_app/src/MetaDownload.css, data/mb-project.inc.template, data/regist.sh, express_server/index.js
   - 削除:tab.css
   - react_appのelasticsearchへのURLの環境変数を一つに集約
   - MetaDownloadの吹き出しの位置調整
-  - configureにおけるデフォルト値をlocalhostへ変更
+  - configureにおけるデフォルト値をlocalhostへ変更、及び引数を変更
   - expressにおいて、elasticsearchへのアクセスをリバースプロキシするよう修正
 
 - 2021/09/12
@@ -48,8 +48,9 @@
 ```
 > git clone git@github.com:ddbj/mb_search.git
 > cd mb_search
-> ./configure -i ElasticSearchのIPアドレス(def=localhost) -p ElasticSearchのポート番号(def=9200)
+> ./configure -u ElasticSearchのURL(def=http://localhost:9200/) -p ElasticSearchへのリバースプロキシURL(def=)
 ElasticSearch is "http://localhost:9200/".
+ReverseProxy is "http://localhost:5000/". # -pオプションが無い場合、-uと同じ値が使用される(リバースプロキシが無い状態)
 > cd data
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../download

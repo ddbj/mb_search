@@ -4,12 +4,12 @@
 
 for INDEX in ${INDEXES}
 do
-	RES=` curl -s http://${URL}/_cat/indices | grep " ${INDEX} "`
+	RES=` curl -s ${URL}/_cat/indices | grep " ${INDEX} "`
 	if [ "${RES}" ]; then
-		curl -XDELETE "http://${URL}/${INDEX}/" -H 'Content-Type: application/json'
+		curl -XDELETE "${URL}/${INDEX}/" -H 'Content-Type: application/json'
 	fi
 
-	curl -XPUT "http://${URL}/${INDEX}/?pretty" -H 'Content-Type: application/json' -d'
+	curl -XPUT "${URL}/${INDEX}/?pretty" -H 'Content-Type: application/json' -d'
 {
   "settings" : {
       "number_of_shards"   : 1,
@@ -40,5 +40,5 @@ do
   }
 }'
 
-	curl -XPOST "http://${URL}/_bulk?pretty" -H "Content-Type: application/json" --data-binary @${INDEX}.data.json
+	curl -XPOST "${URL}/_bulk?pretty" -H "Content-Type: application/json" --data-binary @${INDEX}.data.json
 done

@@ -1,18 +1,18 @@
 #!/bin/sh
 
 usage_exit() {
-	echo "Usage: $0 [-i IP to ElasticSearch] [-p Port for ElasticSearch]" 1>&2
+	echo "Usage: $0 [-u URL to ElasticSearch] [-p URL to ElasticSerach ReverseProxy]" 1>&2
 	exit 1
 }
 
-IP=localhost
-PORT=9200
-while getopts i:p:h OPT
+URL2ES=http://localhost:9200/
+URL2RP=
+while getopts u:p:h OPT
 do
 	case $OPT in
-		i) IP=$OPTARG
+		u) URL2ES=$OPTARG
 		   ;;
-		p) PORT=$OPTARG
+		p) URL2RP=$OPTARG
 		   ;;
 		h) usage_exit
 		   ;;
@@ -21,7 +21,12 @@ do
 	esac
 done
 
-echo ElasticSearch is \"http://${IP}:${PORT}/\".
+echo ElasticSearch is \"${URL2ES}\".
+if [ -n "${URL2RP}" ]; then
+  echo ReverseProxy is \"${URL2RP}\".
+else
+  URL2RP=http://${IP}:${PORT}/
+fi
 
 cd react_app
 eval "echo \"$(cat .env.template)\"" > .env

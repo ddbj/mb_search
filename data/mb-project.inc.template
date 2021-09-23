@@ -1,2 +1,2 @@
-URL=${IP}:${PORT}
+URL=${URL2ES}
 INDEXES=\"mb-project3 mb-file3\"
