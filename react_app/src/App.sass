@@ -1,0 +1,182 @@
+#root
+  p,label
+    margin: 0
+  .serif
+    font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif
+  > .article-wrapper
+    > .top-bar
+      width: 100%
+      height: 60px
+      text-align: center
+      background: linear-gradient(to right, #FFF7D1, #FFD8CC, #FFBD9B)
+      > img
+        height: 60px
+        min-width: 1030px
+    > .contents
+      display: flex
+      justify-content: center
+      > .article
+        > .side-menu
+          > .filter-box
+            border: 1px solid #B3B3B3
+            margin-bottom: 10px
+            .title
+              background-color: rgba(255, 216, 204, .5)
+              padding: 5px 12px 2px
+              margin: 0
+              font-weight: bold
+              font-size: 18px
+              #taxonomy_button
+                border: none
+                color: #000000
+                margin: 0
+                padding: 0
+                &:hover
+                  background: none
+            > .contents
+              padding: 4px 10px
+              font-size: 14px
+              font-weight: bold
+              > .sample-filter-textbox
+                input
+                  height: 22px
+                  border-radius: 100px
+                  border: 1px solid #B3B3B3
+                  background-color: #F4F4F4
+                  padding: 0 0 0 28px
+                  font-size: 12px
+                  margin: 8px 0 2px
+                .search-icon
+                  fill: #666666
+                  width: 10px
+                  height: 10px
+                  margin-top: 5px
+                  margin-left: -5px
+              ul
+                padding: 0
+                margin: 0
+                list-style: none
+                overflow: hidden
+                > li
+                  min-height: 27px
+                  display: flex
+                  align-items: center
+                  white-space: nowrap
+                  > input[type=checkbox]
+                    min-width: 16px
+                  > label
+                    align-items: center
+                    &:before
+                      width: 13px
+                      max-height: 11px
+                      margin-right: 4px
+                    &:after
+                      top: 10px
+                      left: 2px
+                      width: 7px
+                      height: 3px
+                  > label.sample-label
+                    display: flex
+                    justify-content: space-between
+                    width: calc(100% - 24px)
+                    > .label
+                      overflow: auto
+                      width: 90%
+                    > .count
+                      color: #9b9b9b
+
+        > main.main-content
+          width: 762px
+          > .search-input
+            input
+              height: 36px
+              border-radius: 100px
+              border: 1px solid #B3B3B3
+              background-color: #F4F4F4
+              padding: 0 0 0 30px
+              font-size: 12px
+            .search-icon
+              fill: #666666
+              width: 12px
+              height: 12px
+          > .functions
+            border-bottom: 1px solid #808080
+            padding-bottom: 2px
+            margin-top: 23px
+            display: flex
+            justify-content: space-between
+            align-items: flex-end
+            > .project-file-style
+              > .tab
+                padding: 4px 14px
+                font-size: 18px
+                font-weight: bold
+                &:hover
+                  cursor: pointer
+                &.selected-tab
+                  border-top: 1px solid #808080
+                  border-left: 1px solid #808080
+                  border-right: 1px solid #808080
+                  border-radius: 5px 5px 0 0
+                  background-color: #ffffff
+            > .show-count
+              display: flex
+              align-items: center
+              > p
+                font-size: 12px
+                font-weight: bold
+                margin-right: 10px
+              > label
+                font-size: 14px
+                display: flex
+                align-items: center
+                margin-right: 6px
+                > input
+                  margin: 0 2px 0 0
+          .metadownload-button
+            border: none
+            background-color: #FFBD9B
+            color: #000000
+            font-size: 12px
+            font-weight: bold
+            border-radius: 100px
+            padding: 4px 14px
+          > .result-list
+            border-top: 2px solid #666666
+            margin-top: 13px
+            padding-top: 5px
+            > .result-table
+              margin-top: 5px
+              border-top: 1px solid #B3B3B3
+              > a
+                border-bottom: 1px solid #B3B3B3
+                > article
+                  display: flex
+                  align-items: center
+                  input
+                    margin-right: 10px
+                  label
+                    .pointer
+                      padding: 0
+                      font-size: 12px
+                      h2
+                        padding: 0
+                        font-size: 14px
+            > div[class*="-pagination"]
+              font-size: 12px
+              font-weight: bold
+              > a
+                background-color: #E6E6E6
+                color: #000000
+                width: 24px
+                height: 24px
+                border-radius: 100px
+                min-height: auto
+                box-shadow: none
+                border: none
+                &.active
+                  background-color: #FFBD9B
+                &:first-of-type,
+                &:last-of-type
+                  background-color: transparent
+                  padding: 0 20px

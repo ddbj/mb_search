@@ -4,6 +4,10 @@ import {DataSearch,ReactiveBase,ReactiveList,ResultList,MultiList,SingleList} fr
 import MetaDownload from './MetaDownload.js';
 import TreeOnPopup  from './TreeOnPopup.js';
 
+import topBar from './images/top_bar.png';
+
+import './App.css';
+
 const {ResultListWrapper} = ReactiveList;
 
 /*
@@ -11,16 +15,16 @@ Last-Update: 2021/9/23
 ver0.95 ElasticSearchのURLを一つに集約
 
 ver0.94 project検索にて、projectごとのファイル数を表示
-        project検索にて、フィルタによるファイルの選定を無効にする(データモデルが決定するまで今は保留)
+				project検索にて、フィルタによるファイルの選定を無効にする(データモデルが決定するまで今は保留)
 
 ver0.93 samplesのチェックボックスが、他のフィルタを更新時に消されてしまう問題に対処
-          合わせて、TreeOnPopup.jsも修正
+					合わせて、TreeOnPopup.jsも修正
 
 ver0.92 classをキャメルケースから、ハイフン区切りのものに変更
-        細かいレイアウト、バグ修正
+				細かいレイアウト、バグ修正
 
 ver0.91 File, Project検索の切り替えに対応
-        表示件数切り替えを追加
+				表示件数切り替えを追加
 
 ver0.9 新データモデルに対応
 
@@ -411,259 +415,259 @@ for(let i = 0; i < keys.length; i ++)
 //				url = "http://192.168.1.5:9200/"
 				app = {process.env.REACT_APP_INDEX_OF_ELASTICSEARCH}
 				url = {process.env.REACT_APP_URL_TO_ELASTICSEARCH}
+				className="article-wrapper"
 			>
-			<article className="article">
-{/* フィルタコンテンツ */}
-				<div className="side-menu">
-	{/* 装置のフィルタ */}
-					<div>Instrument</div>
-					<MultiList
-						componentId  = "instruments"
-						dataField    = "files.instrument"
-						showCheckbox = {true}
-						showCount    = {true}
-						showSearch   = {false}
-						size         = {10}
-						sortBy       = "asc"
-						className    = "instruments"
-						react        = {{
-							"and": ["samples","files_format","meta_search","file_or_project"]
-						}}
-					/>
-	{/* 拡張子のフィルタ */}
-					<div>File Format</div>
-					<MultiList
-						componentId  = "files_format"
-						dataField    = "files.file_format"
-						showCheckbox = {true}
-						showCount    = {true}
-						showSearch   = {false}
-						size         = {10}
-						sortBy       = "asc"
-						className    = "files_format"
-						react        = {{
-							"and": ["samples","instruments","meta_search","file_or_project"]
-						}}
-					/>
-	{/* サンプル種のフィルタ */}
-					<div className="separate">
-					 <div>Samples</div>
-					 <div className="filter-countr"><span id="taxonomy_button" className="metadownload-button hidden" onClick={this.showTree}>≡</span></div>
-					</div>
-		{/* サンプル種の絞り込み用テキストボックス */}
-					<DataSearch
-						componentId = "sample-filter"
-						dataField   = "taxonomy_names"
-						queryFormat = "and"
-						placeholder = "Filter for TaxNames"
-						autosuggest = {false}
-						className   = "sample-filter-textbox"
-					/>
-		{/* サンプル種の列挙 */}
-					<MultiList
-						componentId = "samples"
-						dataField   = "samples.species"
-						showCheckbox= {true}
-						showCount   = {true}
-						showSearch  = {false}
-						size        = {1000}
-						sortBy      = "asc"
-						react       = {{
-							"and": ["sample-filter","samples.species","files_format","instruments","meta_search","file_or_project"]
-						}}
-						customQuery={() => {
-							// クラス変数をそのまま渡すとうまく動作しないので、コピーする
-							let array = this.sampleFilterArray.concat()
+			<div className="top-bar">
+				<img src={topBar} alt="MetaboBank integrated metabolome data repository" />
+			</div>
+			<div className="contents">
 
-							if(this.sampleFilterArray.length === 0){
-								return {};
-							} else {
-								return {
-									query: { bool: { should: [{ terms:{ "samples.species": array } }] } }
-								};
-							}
-						} }
-						render = {({ loading, error, data, value, handleChange }) => {
-							if (loading) 
-								return <div className="scroll">Fetching Data.</div>;
-							if (error)
-								return <div className="scroll">Something went wrong! Error details {JSON.stringify(error)}</div>;
+				<article className="article">
+	{/* フィルタコンテンツ */}
+					<aside className="side-menu">
+		{/* 装置のフィルタ */}
+						<section className="filter-box">
+							<p className="title serif">Instrument</p>
+							<div className="contents">
+								<MultiList
+									componentId  = "instruments"
+									dataField    = "files.instrument"
+									showCheckbox = {true}
+									showCount    = {true}
+									showSearch   = {false}
+									size         = {10}
+									sortBy       = "asc"
+									className    = "instruments"
+									react        = {{
+										"and": ["samples","files_format","meta_search","file_or_project"]
+									}}
+								/>
+							</div>
+						</section>
+		{/* 拡張子のフィルタ */}
+						<section className="filter-box">
+							<p className="title serif">File Format</p>
+							<div className="contents">
+								<MultiList
+									componentId  = "files_format"
+									dataField    = "files.file_format"
+									showCheckbox = {true}
+									showCount    = {true}
+									showSearch   = {false}
+									size         = {10}
+									sortBy       = "asc"
+									className    = "files_format"
+									react        = {{
+										"and": ["samples","instruments","meta_search","file_or_project"]
+									}}
+								/>
+							</div>
+						</section>
+		{/* サンプル種のフィルタ */}
+						<section className="filter-box">
+							<div className="separate title">
+								<p className="serif">Samples</p>
+								<div className="filter-countr"><span id="taxonomy_button" className="metadownload-button hidden" onClick={this.showTree}>≡</span></div>
+							</div>
+				{/* サンプル種の絞り込み用テキストボックス */}
+							<div className="contents">
+								<DataSearch
+									componentId = "sample-filter"
+									dataField   = "taxonomy_names"
+									queryFormat = "and"
+									placeholder = "Filter for TaxNames"
+									autosuggest = {false}
+									className   = "sample-filter-textbox"
+								/>
+					{/* サンプル種の列挙 */}
+								<MultiList
+									componentId = "samples"
+									dataField   = "samples.species"
+									showCheckbox= {true}
+									showCount   = {true}
+									showSearch  = {false}
+									size        = {1000}
+									sortBy      = "asc"
+									react       = {{
+										"and": ["sample-filter","samples.species","files_format","instruments","meta_search","file_or_project"]
+									}}
+									customQuery={() => {
+										// クラス変数をそのまま渡すとうまく動作しないので、コピーする
+										let array = this.sampleFilterArray.concat()
 
-							// checkedの状態を設定
-							this.handleChange = handleChange;
-							for(let i = 0; i < data.length; i ++){
-								let flag = false;
-								for(let j = 0; j < this.sampleFilterArray.length; j ++){
-									if(this.sampleFilterArray[j] === data[i].key){
-										flag = true;
-										break;
-									}
-								}
-								data[i].checked = flag;
-							}
+										if(this.sampleFilterArray.length === 0){
+											return {};
+										} else {
+											return {
+												query: { bool: { should: [{ terms:{ "samples.species": array } }] } }
+											};
+										}
+									} }
+									render = {({ loading, error, data, value, handleChange }) => {
+										if (loading) 
+											return <div className="scroll">Fetching Data.</div>;
+										if (error)
+											return <div className="scroll">Something went wrong! Error details {JSON.stringify(error)}</div>;
 
-{/*							return (
-								<div className="scroll">
-								  {data.map(item => (
-								    <label key={item.key} htmlFor={item.key}>
-								      <div className="separate-compact under-bar">
-								        <div className="flex-left">
-								         <div className="middle">
-								          <input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
-								         </div>
-								         <div className="compact">{item.key}</div>
-								        </div>
-								        <div className="right-align"><span className="middle">{item.doc_count}</span></div>
-								      </div>
-								    </label>
-								  ))}
-								</div>
-							);*/}
-							return (
-								<div className="scroll">
-								<table className="filter-table">
-								  {data.map(item => (<label key={item.key} htmlFor={item.key}>
-								    <tr className="filter-tr">
-								     <td>
-								      <input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
-								     </td>
-								     <td className="filter-td">{item.key}</td>
-								     <td className="right-align">{item.doc_count}</td>
-								    </tr></label>
-								  ))}
-								</table>
-								</div>
-					        );
-					    }}
-					/>
-	{/* ファイルかプロジェクトか */}
-					<div className="hidden">
-						<div>File/Project</div>
-						<SingleList
-							componentId ="file_or_project"
-							dataField   ="handling_type"
-							showCheckbox={true}
-							showCount   ={false}
-							showSearch  ={false}
-							defaultValue="project"
-							sortBy      ="asc"
-							customQuery ={() => {
-								var targets = document.getElementsByName("file_or_project");
-								var targetValue = "project";
-								if(2 <= targets.length)
-									if(targets[0].checked)
-										targetValue = "file";
-								return {
-									query: { bool: { must: [{ term:{ handling_type: targetValue } }] } }
-								};
+										// checkedの状態を設定
+										this.handleChange = handleChange;
+										for(let i = 0; i < data.length; i ++){
+											let flag = false;
+											for(let j = 0; j < this.sampleFilterArray.length; j ++){
+												if(this.sampleFilterArray[j] === data[i].key){
+													flag = true;
+													break;
+												}
+											}
+											data[i].checked = flag;
+										}
+										return (
+											<div className="scroll">
+											<ul>
+												{data.map(item => (
+													<li key={item.key} htmlFor={item.key}>
+														<input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
+														<label for={item.key} className="sample-label">
+															<span className="label">{item.key}</span>
+															<span className="count">{item.doc_count}</span>
+														</label>
+													</li>
+												))}
+											</ul>
+											</div>
+												);
+										}}
+								/>
+							</div>
+						</section>
+		{/* ファイルかプロジェクトか */}
+						<div className="hidden">
+							<div>File/Project</div>
+							<SingleList
+								componentId ="file_or_project"
+								dataField   ="handling_type"
+								showCheckbox={true}
+								showCount   ={false}
+								showSearch  ={false}
+								defaultValue="project"
+								sortBy      ="asc"
+								customQuery ={() => {
+									var targets = document.getElementsByName("file_or_project");
+									var targetValue = "project";
+									if(2 <= targets.length)
+										if(targets[0].checked)
+											targetValue = "file";
+									return {
+										query: { bool: { must: [{ term:{ handling_type: targetValue } }] } }
+									};
+								}}
+								render     ={({ loading, error, data, handleChange }) => {
+									return (
+										<div>
+											{data.map(item => (
+												<div key={item.key}><input type="radio" id={"type_"+item.key} value={item.key} name="file_or_project" onChange={handleChange} />{item.key} {item.doc_count}</div>
+											))}
+										</div>
+									);
+								}}
+							/>
+						</div>
+		{/* 表示件数 */}
+					</aside>
+	{/*** 結果コンテンツ ***/}
+					<main className="main-content">
+		{/* metaデータを検索するためのテキストボックス */}
+						<DataSearch
+							componentId = "meta_search"
+							dataField   = {["project_label","description"]}
+							queryFormat = "and"
+							placeholder = "Search for Meta Data"
+							className="search-input"
+						/>
+		{/* ProjectとFileの切り替え */}
+						<div className="functions">
+							<div className="project-file-style">
+								<span className="tab selected-tab serif"   id="switch2Project" onClick={this.switch2Project}>Project</span>
+								<span className="tab unselected-tab serif" id="switch2File"    onClick={this.switch2File}>File</span>
+							</div>
+							<div className="show-count">
+								<p className="label">Show Count</p>
+								<label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} defaultChecked={true} />5</label>
+								<label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} />10</label>
+								<label htmlFor="show_count_20"><input type="radio" id="show_count_20" name="show_count" value="20" onChange={this.changeShowCount} />20</label>
+								<label htmlFor="show_count_50"><input type="radio" id="show_count_50" name="show_count" value="50" onChange={this.changeShowCount} />50</label>
+							</div>
+						</div>
+		{/* 結果を操作するボタン群 */}
+						<div className="separate">
+							<div>
+								<span className="metadownload-button" onClick={this.selectAllCheckbox}  >Select All</span>
+								<span className="metadownload-button" onClick={this.deselectAllCheckbox}>Deselect All</span>
+							</div>
+							<div>
+								<span className="metadownload-button" onClick={this.showMetaSettings}>DL(Meta)</span>
+								<span className="metadownload-button" onClick={this.doDownload}      >DL(File)</span>
+								<span>{this.state.file_count} <span className="small">file(s)</span>/{this.state.count} <span className="small">selected.</span></span>
+							</div>
+						</div>
+		{/* Metaダウンロード設定 */}
+						<MetaDownload formID={this.metaFormID} getMetaDataFunc={() => this.getMetaDataFunc()} />
+
+		{/* 結果の表示 */}
+						<ReactiveList
+							componentId = "list-component"
+							dataField   = "id"
+							sortBy      = "asc"
+							pagination  = {true}
+							size        = {this.state.show_count}
+							react       = {{
+								"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 							}}
-							render     ={({ loading, error, data, handleChange }) => {
+							onPageChange = {
+								() => { this.reflectCheckboxes(); }
+							}
+							className="result-list"
+						>
+							{({data, error, loading}) => {
+								// file数のカウント
+								if(this.handledType === "project"){
+									for(let i = 0; i < data.length; i ++)
+										data[i].file_count = data[i].files.length + " files(0 GB)";
+								} else {
+									for(let i = 0; i < data.length; i ++)
+										data[i].file_count = data[i].files[0].file_format + " (0 GB)";
+								}
 								return (
-									<div>
-									  {data.map(item => (
-									    <div key={item.key}><input type="radio" id={"type_"+item.key} value={item.key} name="file_or_project" onChange={handleChange} />{item.key} {item.doc_count}</div>
-									  ))}
-									</div>
+									<ResultListWrapper className="result-table">
+									{
+										data.map(item => (
+											<ResultList key = {item._id}>
+											<ResultList.Content>
+												<input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.id} onChange={this.saveChecked} />
+												<label htmlFor={item.id}>
+													<div className="pointer">
+														<ResultList.Title
+															dangerouslySetInnerHTML = {{
+															__html: "<div class=\"separate-compact\"><div>ID:" + item.id + "</div><div><span class=\"small\">" + item.file_count + "</span></div></div>"
+														}}
+														/>
+														<ResultList.Description></ResultList.Description>
+													</div>
+												<span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
+												</label>
+											</ResultList.Content>
+											</ResultList>
+										))
+									}
+									</ResultListWrapper>
 								);
 							}}
-						/>
-					</div>
-	{/* 表示件数 */}
-					<div className="margin-top">Show Count</div>
-					<div>
-					  <label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} defaultChecked={true} />5</label>
-					  <label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} />10</label>
-					  <label htmlFor="show_count_20"><input type="radio" id="show_count_20" name="show_count" value="20" onChange={this.changeShowCount} />20</label>
-					  <label htmlFor="show_count_50"><input type="radio" id="show_count_50" name="show_count" value="50" onChange={this.changeShowCount} />50</label>
-					</div>
-				</div>
-{/*** 結果コンテンツ ***/}
-				<div className="main-content">
-	{/* metaデータを検索するためのテキストボックス */}
-					<DataSearch
-						componentId = "meta_search"
-						dataField   = {["project_label","description"]}
-						queryFormat = "and"
-						placeholder = "Search for Meta Data"
-					/>
-	{/* ProjectとFileの切り替え */}
-					<div className="project-file-style">
-					  <span className="tab selected-tab"   id="switch2Project" onClick={this.switch2Project}>Project</span>
-					  <span className="tab unselected-tab" id="switch2File"    onClick={this.switch2File}>File</span>
-					  <hr className="separation-hr" />
-					</div>
-	{/* 結果を操作するボタン群 */}
-					<div className="separate">
-					  <div>
-					    <span className="metadownload-button" onClick={this.selectAllCheckbox}  >Select All</span>
-					    <span className="metadownload-button" onClick={this.deselectAllCheckbox}>Deselect All</span>
-					  </div>
-					  <div>
-					    <span className="metadownload-button" onClick={this.showMetaSettings}>DL(Meta)</span>
-					    <span className="metadownload-button" onClick={this.doDownload}      >DL(File)</span>
-					    <span>{this.state.file_count} <span className="small">file(s)</span>/{this.state.count} <span className="small">selected.</span></span>
-					  </div>
-					</div>
-	{/* Metaダウンロード設定 */}
-					<MetaDownload formID={this.metaFormID} getMetaDataFunc={() => this.getMetaDataFunc()} />
-					<hr />
-
-	{/* 結果の表示 */}
-					<ReactiveList
-						componentId = "list-component"
-						dataField   = "id"
-						sortBy      = "asc"
-						pagination  = {true}
-						size        = {this.state.show_count}
-						react       = {{
-							"and": ["meta_search","instruments","files_format","samples","file_or_project"]
-						}}
-						onPageChange = {
-							() => { this.reflectCheckboxes(); }
-						}
-					>
-						{({data, error, loading}) => {
-							// file数のカウント
-							if(this.handledType === "project"){
-								for(let i = 0; i < data.length; i ++)
-									data[i].file_count = data[i].files.length + " files(0 GB)";
-							} else {
-								for(let i = 0; i < data.length; i ++)
-									data[i].file_count = data[i].files[0].file_format + " (0 GB)";
-							}
-							return (
-								<ResultListWrapper>
-								{
-									data.map(item => (
-										<ResultList key = {item._id}>
-										 <ResultList.Content>
-										  <label htmlFor={item.id}>
-										  <div className="pointer">
-										   <ResultList.Title
-										     dangerouslySetInnerHTML = {{
-											   __html: "<div class=\"separate-compact\"><div>ID:" + item.id + "</div><div><span class=\"small\">" + item.file_count + "</span></div></div>"
-											 }}
-										   />
-										   <ResultList.Description>
-										    <div>
-										     <input type="checkbox" name="download_check" value={JSON.stringify(item)} id={item.id} onChange={this.saveChecked} /><span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
-										    </div>
-										   </ResultList.Description>
-										  </div>
-										  </label>
-										 </ResultList.Content>
-										</ResultList>
-									))
-								}
-								</ResultListWrapper>
-							);
-						}}
-					</ReactiveList>
-	{/* ツリー用ポップアップ */}
-					<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_ELASTICSEARCH + process.env.REACT_APP_INDEX_OF_ELASTICSEARCH + "/_search"} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
-
-				</div>
-			</article>
+						</ReactiveList>
+		{/* ツリー用ポップアップ */}
+						<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
+					</main>
+				</article>
+			</div>
 			</ReactiveBase>
 		);
 	}
