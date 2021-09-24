@@ -5,7 +5,6 @@ import './index.css';
 import './CheckBoxTree.css';
 import './TreeOnPopup.css';
 import './MetaDownload.css';
-import './Tab.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 

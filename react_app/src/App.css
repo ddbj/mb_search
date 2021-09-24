@@ -1,38 +1,259 @@
-.App {
+#root p, #root label {
+  margin: 0;
+}
+
+#root .serif {
+  font-family: "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif;
+}
+
+#root > .article-wrapper > .top-bar {
+  width: 100%;
+  height: 60px;
   text-align: center;
+  background: linear-gradient(to right, #FFF7D1, #FFD8CC, #FFBD9B);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#root > .article-wrapper > .top-bar > img {
+  height: 60px;
+  min-width: 1030px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#root > .article-wrapper > .contents {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box {
+  border: 1px solid #B3B3B3;
+  margin-bottom: 10px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box .title {
+  background-color: rgba(255, 216, 204, 0.5);
+  padding: 5px 12px 2px;
+  margin: 0;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box .title #taxonomy_button {
+  border: none;
+  color: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box .title #taxonomy_button:hover {
+  background: none;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents {
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents > .sample-filter-textbox input {
+  height: 22px;
+  border-radius: 100px;
+  border: 1px solid #B3B3B3;
+  background-color: #F4F4F4;
+  padding: 0 0 0 28px;
+  font-size: 12px;
+  margin: 8px 0 2px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents > .sample-filter-textbox .search-icon {
+  fill: #666666;
+  width: 10px;
+  height: 10px;
+  margin-top: 5px;
+  margin-left: -5px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li {
+  min-height: 27px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > input[type=checkbox] {
+  min-width: 16px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label {
+  align-items: center;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label:before {
+  width: 13px;
+  max-height: 11px;
+  margin-right: 4px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label:after {
+  top: 10px;
+  left: 2px;
+  width: 7px;
+  height: 3px;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label.sample-label {
+  display: flex;
+  justify-content: space-between;
+  width: calc(100% - 24px);
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label.sample-label > .label {
+  overflow: auto;
+  width: 90%;
+}
+
+#root > .article-wrapper > .contents > .article > .side-menu > .filter-box > .contents ul > li > label.sample-label > .count {
+  color: #9b9b9b;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content {
+  width: 762px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .search-input input {
+  height: 36px;
+  border-radius: 100px;
+  border: 1px solid #B3B3B3;
+  background-color: #F4F4F4;
+  padding: 0 0 0 30px;
+  font-size: 12px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .search-input .search-icon {
+  fill: #666666;
+  width: 12px;
+  height: 12px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions {
+  border-bottom: 1px solid #808080;
+  padding-bottom: 2px;
+  margin-top: 23px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .project-file-style > .tab {
+  padding: 4px 14px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .project-file-style > .tab:hover {
+  cursor: pointer;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .project-file-style > .tab.selected-tab {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #808080;
+  border-radius: 5px 5px 0 0;
+  background-color: #ffffff;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .show-count {
+  display: flex;
+  align-items: center;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .show-count > p {
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .show-count > label {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  margin-right: 6px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .functions > .show-count > label > input {
+  margin: 0 2px 0 0;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content .metadownload-button {
+  border: none;
+  background-color: #FFBD9B;
+  color: #000000;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 100px;
+  padding: 4px 14px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list {
+  border-top: 2px solid #666666;
+  margin-top: 13px;
+  padding-top: 5px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table {
+  margin-top: 5px;
+  border-top: 1px solid #B3B3B3;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table > a {
+  border-bottom: 1px solid #B3B3B3;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table > a > article {
+  display: flex;
+  align-items: center;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table > a > article input {
+  margin-right: 10px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table > a > article label .pointer {
+  padding: 0;
+  font-size: 12px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > .result-table > a > article label .pointer h2 {
+  padding: 0;
+  font-size: 14px;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > div[class*="-pagination"] {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > div[class*="-pagination"] > a {
+  background-color: #E6E6E6;
+  color: #000000;
+  width: 24px;
+  height: 24px;
+  border-radius: 100px;
+  min-height: auto;
+  box-shadow: none;
+  border: none;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > div[class*="-pagination"] > a.active {
+  background-color: #FFBD9B;
+}
+
+#root > .article-wrapper > .contents > .article > main.main-content > .result-list > div[class*="-pagination"] > a:first-of-type, #root > .article-wrapper > .contents > .article > main.main-content > .result-list > div[class*="-pagination"] > a:last-of-type {
+  background-color: transparent;
+  padding: 0 20px;
 }
