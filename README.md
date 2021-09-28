@@ -1,5 +1,9 @@
 # 履歴
 
+- 2021/09/28
+  - 変更:App.js
+  - add-cssブランチと2021/09/23の変更をマージ
+
 - 2021/09/23
   - 変更:configure, react_app/.env.template, react_app/src/App.js, react_app/src/MetaDownload.css, data/mb-project.inc.template, data/regist.sh, express_server/index.js
   - 削除:tab.css
