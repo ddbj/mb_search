@@ -664,7 +664,7 @@ for(let i = 0; i < keys.length; i ++)
 							}}
 						</ReactiveList>
 		{/* ツリー用ポップアップ */}
-						<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_TAXONOMY} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
+						<TreeOnPopup ref={this.popupTree} onUpdate={this.reflectSampleFilterFromTree} filterName="samples" onReady="taxonomy_button" endpoint={process.env.REACT_APP_URL_TO_ELASTICSEARCH + process.env.REACT_APP_INDEX_OF_ELASTICSEARCH + "/_search"} column={process.env.REACT_APP_COLUMN_OF_TAXONOMY} />
 					</main>
 				</article>
 			</div>
