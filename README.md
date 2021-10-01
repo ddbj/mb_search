@@ -1,7 +1,14 @@
 # 履歴
 
+- 2021/10/01
+  - 変更:react_app/src/App.js, react_app/public/index.html, data/regist.sh
+  - 表示名変更
+  - ファセット検索部分を件数順に
+  - メタデータ検索部分に、idとproject_idを追加
+  - 上記に伴い、elasticsearch上のidとproject_idをkeyword型からtext型へ変更(そのため、今まで検索結果をID順に表示していたが、text型ではソートできないため、ソート指定を解除)
+
 - 2021/09/28
-  - 変更:App.js
+  - 変更:react_app/src/App.js
   - add-cssブランチと2021/09/23の変更をマージ
 
 - 2021/09/23

@@ -436,7 +436,6 @@ for(let i = 0; i < keys.length; i ++)
 									showCount    = {true}
 									showSearch   = {false}
 									size         = {10}
-									sortBy       = "asc"
 									className    = "instruments"
 									react        = {{
 										"and": ["samples","files_format","meta_search","file_or_project"]
@@ -455,7 +454,6 @@ for(let i = 0; i < keys.length; i ++)
 									showCount    = {true}
 									showSearch   = {false}
 									size         = {10}
-									sortBy       = "asc"
 									className    = "files_format"
 									react        = {{
 										"and": ["samples","instruments","meta_search","file_or_project"]
@@ -487,7 +485,6 @@ for(let i = 0; i < keys.length; i ++)
 									showCount   = {true}
 									showSearch  = {false}
 									size        = {1000}
-									sortBy      = "asc"
 									react       = {{
 										"and": ["sample-filter","samples.species","files_format","instruments","meta_search","file_or_project"]
 									}}
@@ -579,7 +576,7 @@ for(let i = 0; i < keys.length; i ++)
 		{/* metaデータを検索するためのテキストボックス */}
 						<DataSearch
 							componentId = "meta_search"
-							dataField   = {["project_label","description"]}
+							dataField   = {["id","project_id","project_label","description"]}
 							queryFormat = "and"
 							placeholder = "Search for Meta Data"
 							className="search-input"
@@ -617,7 +614,6 @@ for(let i = 0; i < keys.length; i ++)
 						<ReactiveList
 							componentId = "list-component"
 							dataField   = "id"
-							sortBy      = "asc"
 							pagination  = {true}
 							size        = {this.state.show_count}
 							react       = {{

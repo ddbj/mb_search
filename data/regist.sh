@@ -17,9 +17,9 @@ do
   },
   "mappings": {
     "properties": {
-	"id":               {"type": "keyword"},
+	"id":               {"type": "text"},
 	"project":          {"type": "keyword"},
-	"project_id":       {"type": "keyword"},
+	"project_id":       {"type": "text"},
 	"project_label":    {"type": "text"},
 	"description":      {"type": "text"},
 	"instruments":      {"type": "keyword"},
