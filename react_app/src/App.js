@@ -587,7 +587,7 @@ for(let i = 0; i < keys.length; i ++)
 		{/* ProjectとFileの切り替え */}
 						<div className="functions">
 							<div className="project-file-style">
-								<span className="tab selected-tab serif"   id="switch2Project" onClick={this.switch2Project}>Project</span>
+								<span className="tab selected-tab serif"   id="switch2Project" onClick={this.switch2Project}>Study</span>
 								<span className="tab unselected-tab serif" id="switch2File"    onClick={this.switch2File}>File</span>
 							</div>
 							<div className="show-count">
