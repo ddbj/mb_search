@@ -69,7 +69,6 @@ ReverseProxy is "http://localhost:5000/". # -pオプションが無い場合、-
 DownloadURL is "http://localhost/comp_dl.phar".
 > cd data
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
-> cd ../download
 > cd ../react_app
 > npm install
 > npm run build
