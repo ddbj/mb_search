@@ -11,7 +11,9 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/9/23
+Last-Update: 2021/10/02
+ver0.96 ファイルダウンロード時にエラーが発生した場合、このコード内で処理するよう修正
+
 ver0.95 ElasticSearchのURLを一つに集約
 
 ver0.94 project検索にて、projectごとのファイル数を表示
@@ -257,8 +259,16 @@ for(let i = 0; i < keys.length; i ++)
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
 			body: request
 		}).then((res) => { // 結果取得
-			if(!res.ok)
+			if(!res.ok){
+				if( res.status == 500 ) // ファイルが無い or Zip処理に失敗
+					alert("Error: Files you specified does not exists OR Zip process failed.\nPlease contact the administrator with the following information.\n\n--request--\n" + request);
+				else if( res.status == 503 ) // 一時ディレクトリの作成に失敗
+					alert("Error: Failed to create tmp directory.\n\n  Maybe, there is a lot of access.\n  Please take a moment and try again.\n");
+				else // unkonwn エラー
+					alert("Error: " + res.status + " " + res.statusText + "\n\n--request--\n" + request);
+
 				throw new Error(`${res.status} ${res.statusText}`);
+			}
 			filename = res.headers.get("content-disposition").split('filename=')[1].replace(/"/g,'');
 			return res.blob();
 		}).then((blob) => { // blob取得
@@ -273,7 +283,7 @@ for(let i = 0; i < keys.length; i ++)
 				URL.revokeObjectURL(url);
 			}, 1E4);
 		}).catch((reason) => { // エラー
-			console.log(reason);
+			//console.log(reason);
 		});
 	}
 

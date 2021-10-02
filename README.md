@@ -1,5 +1,10 @@
 # 履歴
 
+- 2021/10/02
+  - 変更:configure, react_app/src/App.js, react_app/.env.template
+  - 削除:download/
+  - ファイルダウンロー時にエラーが発生した場合、今までerror.zipを返していたが、react内でエラーメッセージを表示するよう修正
+
 - 2021/10/01
   - 変更:react_app/src/App.js, react_app/public/index.html, data/regist.sh
   - 表示名変更
@@ -47,8 +52,7 @@
 
 # 必要なもの
 
-- webサーバ (開発のバージョンはapache2.4.6)
-- php 7>= + zipモジュール (開発のバージョンは7.3.29)
+- (expressサーバを使用しない場合)webサーバ (開発のバージョンはapache2.4.6)
 - elasticsearch 7>= (開発のバージョンは7.14.0)
 - npm (開発のバージョンは6.14.13)
 
@@ -59,16 +63,13 @@
 ```
 > git clone git@github.com:ddbj/mb_search.git
 > cd mb_search
-> ./configure -u ElasticSearchのURL(def=http://localhost:9200/) -p ElasticSearchへのリバースプロキシURL(def=)
+> ./configure -u ElasticSearchのURL(def=http://localhost:9200/) -p ElasticSearchへのリバースプロキシURL(def=) -d ファイルダウンロードのURL(def=http://localhost/comp_dl.phar)
 ElasticSearch is "http://localhost:9200/".
 ReverseProxy is "http://localhost:5000/". # -pオプションが無い場合、-uと同じ値が使用される(リバースプロキシが無い状態)
+DownloadURL is "http://localhost/comp_dl.phar".
 > cd data
 > ./regist.sh # mb-project3とmb-file3のindexへデータを登録
 > cd ../download
-```
-- download/*をwebからアクセスできる場所に置き、react_app/.envファイルのREACT_APP_URL_TO_DOWNLOAD_FILESの値をCompressDownload.phpがアクセスできるURLに変更する(ex. REACT_APP_URL_TO_DOWNLOAD_FILES=http\://localhost/CompressedDownload.php)。
-- webサーバにて、corsの設定を行う
-```
 > cd ../react_app
 > npm install
 > npm run build
@@ -109,14 +110,11 @@ Owner is "apache:apache".
   - reactとダウンロードスクリプトをDocumentRootへ設置するスクリプト。-hでヘルプ表示。
 - data/
   - elasticsearchデータ
-- download/
-  - 圧縮ファイル群をダウンロードするphpスクリプト
 - react_app/
   - 検索プログラム
 
 # 補足
 - jsonデータは、sparql2elasticsearch_prototype.rbのデータに、**id,files{instruments,files_format,filename,type},handling_type**の属性を追加している。
 - reactivesearchでは、フィルタに使用できる属性は**keyword型**、検索に使用できる属性は**text型**のため、あらかじめマッピングを定義している。
-- ダウンロードファイルは現在1万件以上あり、今後どの程度増えるか分からないため、ファイル名のmd5値の、**/一桁目/二、三桁目/ファイルの実体**、と言うような階層構造を持たせることを想定している。
 - ***フィルタは相互に影響するよう修正。加えて、絞り込み検索もフィルタへ影響を及ぼすよう修正。これによって、チェック済みのフィルタをどう扱うかが問題となる。***
 - taxonomy treeに関して、階層が深すぎるので、現在は-ales(目)と-aceae(科)以外は無視している。

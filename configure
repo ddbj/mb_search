@@ -1,18 +1,21 @@
 #!/bin/sh
 
 usage_exit() {
-	echo "Usage: $0 [-u URL to ElasticSearch] [-p URL to ElasticSerach ReverseProxy]" 1>&2
+	echo "Usage: $0 [-u URL to ElasticSearch] [-p URL to ElasticSerach ReverseProxy] [-d URL to Dowload]" 1>&2
 	exit 1
 }
 
 URL2ES=http://localhost:9200/
 URL2RP=
-while getopts u:p:h OPT
+URL2DL=http://localhost/comp_dl.phar
+while getopts u:p:d:h OPT
 do
 	case $OPT in
 		u) URL2ES=$OPTARG
 		   ;;
 		p) URL2RP=$OPTARG
+		   ;;
+		d) URL2DL=$OPTARG
 		   ;;
 		h) usage_exit
 		   ;;
@@ -34,6 +37,7 @@ if [ -n "${URL2RP}" ]; then
 else
   URL2RP=${URL2ES}
 fi
+echo DownloadURL is \"${URL2DL}\".
 
 cd react_app
 eval "echo \"$(cat .env.template)\"" > .env
