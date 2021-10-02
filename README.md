@@ -59,9 +59,9 @@
 # セッティング(for express)
 - mb-project3とmb-file3というインデックスを使用
 - expressサーバの設定
- - ポートは5000(PORT=で上書き可能)
- - elasticsearchへのリバースプロキシは/mb-project3,mb-file3/*にマッチする場合(INDEX=で上書き可能)
- - elasticsearchへのURLはlocalhost:9200(EX=で上書き可能)
+  - ポートは5000(PORT=で上書き可能)
+  - elasticsearchへのリバースプロキシは/mb-project3,mb-file3/*にマッチする場合(INDEX=で上書き可能)
+  - elasticsearchへのURLはlocalhost:9200(EX=で上書き可能)
 
 ```
 > git clone git@github.com:ddbj/mb_search.git
