@@ -11,7 +11,9 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/10/02
+Last-Update: 2021/10/04
+ver0.961 検索結果から詳細ページへジャンプするリンクを追加
+
 ver0.96 ファイルダウンロード時にエラーが発生した場合、このコード内で処理するよう修正
 
 ver0.95 ElasticSearchのURLを一つに集約
@@ -626,6 +628,7 @@ for(let i = 0; i < keys.length; i ++)
 							dataField   = "id"
 							pagination  = {true}
 							size        = {this.state.show_count}
+							pages       = "10"
 							react       = {{
 								"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 							}}
@@ -637,11 +640,15 @@ for(let i = 0; i < keys.length; i ++)
 							{({data, error, loading}) => {
 								// file数のカウント
 								if(this.handledType === "project"){
-									for(let i = 0; i < data.length; i ++)
+									for(let i = 0; i < data.length; i ++){
 										data[i].file_count = data[i].files.length + " files(0 GB)";
+										data[i].detailURL  = "<a href=\"" + process.env.REACT_APP_URL_TO_DETAIL + "/" + data[i].id  + "\" target=\"_blank\" rel=\"noopener noreferrer\">ID:" + data[i].id + "</a>";
+									}
 								} else {
-									for(let i = 0; i < data.length; i ++)
+									for(let i = 0; i < data.length; i ++){
 										data[i].file_count = data[i].files[0].file_format + " (0 GB)";
+										data[i].detailURL  = "ID:" + data[i].id;
+									}
 								}
 								return (
 									<ResultListWrapper className="result-table">
@@ -654,7 +661,7 @@ for(let i = 0; i < keys.length; i ++)
 													<div className="pointer">
 														<ResultList.Title
 															dangerouslySetInnerHTML = {{
-															__html: "<div class=\"separate-compact\"><div>ID:" + item.id + "</div><div><span class=\"small\">" + item.file_count + "</span></div></div>"
+															__html: "<div class=\"separate-compact\"><div>" + item.detailURL + "</div><div><span class=\"small\">" + item.file_count + "</span></div></div>"
 														}}
 														/>
 														<ResultList.Description></ResultList.Description>

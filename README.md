@@ -1,5 +1,10 @@
 # 履歴
 
+- 2021/10/04
+  - 変更:react_app/src/App.js, react_app/.env.template
+  - 検索結果から詳細ページへジャンプするリンクを追加。
+  - 合わせて、リンク先のベースURLを示す環境変数を追加(REACT_APP_URL_TO_DETAIL=https://mb2.ddbj.nig.ac.jp/study)。
+
 - 2021/10/02
   - 変更:configure, react_app/src/App.js, react_app/.env.template
   - 削除:download/
