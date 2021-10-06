@@ -11,8 +11,13 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/10/04
+Last-Update: 2021/10/06
+ver0.962 ページネーションを上下両方に表示
+         REACT_APP_URL_TO_DETAILをベースURLから、変数使用可の完全URLに変更
+         検索結果の表記を変更
+
 ver0.961 検索結果から詳細ページへジャンプするリンクを追加
+         ページネーションの数を５から１０に変更
 
 ver0.96 ファイルダウンロード時にエラーが発生した場合、このコード内で処理するよう修正
 
@@ -628,10 +633,20 @@ for(let i = 0; i < keys.length; i ++)
 							dataField   = "id"
 							pagination  = {true}
 							size        = {this.state.show_count}
+							paginationAt= "both"
 							pages       = "10"
 							react       = {{
 								"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 							}}
+							renderResultStats={
+								function(stats){
+									return (
+										<div dangerouslySetInnerHTML = {{
+											__html: `<strong>${stats.numberOfResults}</strong> results, showing ${stats.currentPage*stats.displayedResults+1} to ${(stats.currentPage+1)*stats.displayedResults}`
+										}}></div>
+									)
+								}
+							}
 							onPageChange = {
 								() => { this.reflectCheckboxes(); }
 							}
@@ -642,7 +657,7 @@ for(let i = 0; i < keys.length; i ++)
 								if(this.handledType === "project"){
 									for(let i = 0; i < data.length; i ++){
 										data[i].file_count = data[i].files.length + " files(0 GB)";
-										data[i].detailURL  = "<a href=\"" + process.env.REACT_APP_URL_TO_DETAIL + "/" + data[i].id  + "\" target=\"_blank\" rel=\"noopener noreferrer\">ID:" + data[i].id + "</a>";
+										data[i].detailURL  = "<a href=\"" + process.env.REACT_APP_URL_TO_DETAIL.replace("{ID}", data[i].id)  + "\" target=\"_blank\" rel=\"noopener noreferrer\">ID:" + data[i].id + "</a>";
 									}
 								} else {
 									for(let i = 0; i < data.length; i ++){

@@ -1,9 +1,16 @@
 # 履歴
 
+- 2021/10/06
+  - 変更:react_app/src/App.js, react_app/.env.template
+  - 詳細ページへのURL（REACT_APP_URL_TO_DETAIL）をベースURLから、{ID}（変数）を含む完全URLへと変更。
+  - ページネーションを上下の両方に表示
+  - 検索結果の表記を変更
+
 - 2021/10/04
   - 変更:react_app/src/App.js, react_app/.env.template
   - 検索結果から詳細ページへジャンプするリンクを追加。
   - 合わせて、リンク先のベースURLを示す環境変数を追加(REACT_APP_URL_TO_DETAIL=https://mb2.ddbj.nig.ac.jp/study)。
+  - ページネーションの表示数を5から10に変更。
 
 - 2021/10/02
   - 変更:configure, react_app/src/App.js, react_app/.env.template
