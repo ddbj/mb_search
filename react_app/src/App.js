@@ -11,7 +11,9 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/10/06
+Last-Update: 2021/10/11
+ver0.963 ヘッダ画像に/へのリンクを追加
+
 ver0.962 ページネーションを上下両方に表示
          REACT_APP_URL_TO_DETAILをベースURLから、変数使用可の完全URLに変更
          検索結果の表記を変更
@@ -435,7 +437,7 @@ for(let i = 0; i < keys.length; i ++)
 				className="article-wrapper"
 			>
 			<div className="top-bar">
-				<img src={topBar} alt="MetaboBank integrated metabolome data repository" />
+				<a href="/" title="MetaboBank"><img src={topBar} alt="MetaboBank integrated metabolome data repository" /></a>
 			</div>
 			<div className="contents">
 

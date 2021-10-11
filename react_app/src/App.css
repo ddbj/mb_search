@@ -13,7 +13,7 @@
   background: linear-gradient(to right, #FFF7D1, #FFD8CC, #FFBD9B);
 }
 
-#root > .article-wrapper > .top-bar > img {
+#root > .article-wrapper > .top-bar > a > img {
   height: 60px;
   min-width: 1030px;
 }
