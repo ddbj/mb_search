@@ -13,6 +13,7 @@ const {ResultListWrapper} = ReactiveList;
 /*
 Last-Update: 2021/10/11
 ver0.963 ヘッダ画像に/へのリンクを追加
+         ElasticSearchの結果を1万件上限を、ElasticSerach側の設定に依存するよう修正
 
 ver0.962 ページネーションを上下両方に表示
          REACT_APP_URL_TO_DETAILをベースURLから、変数使用可の完全URLに変更
@@ -631,13 +632,14 @@ for(let i = 0; i < keys.length; i ++)
 
 		{/* 結果の表示 */}
 						<ReactiveList
-							componentId = "list-component"
-							dataField   = "id"
-							pagination  = {true}
-							size        = {this.state.show_count}
-							paginationAt= "both"
-							pages       = "10"
-							react       = {{
+							componentId  = "list-component"
+							dataField    = "id"
+							defaultQuery = {() => ({ track_total_hits: true })}
+							pagination   = {true}
+							size         = {this.state.show_count}
+							paginationAt = "both"
+							pages        = "10"
+							react        = {{
 								"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 							}}
 							renderResultStats={

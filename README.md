@@ -1,7 +1,9 @@
 # New
 - 2021/10/11
-  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass
+  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass, data/regist.sh
   - ヘッダ画像に/へのリンクを追加
+  - elasticsearchへのデータ登録時、最大結果数を10万件に変更
+  - 合わせて、ReactiveList側でも、検索結果をelasticserachの設定に依存するよう修正
 
 # 必要なもの
 
@@ -77,8 +79,10 @@ Owner is "apache:apache".
 # 履歴
 
 - 2021/10/11
-  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass
+  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass, data/regist.sh
   - ヘッダ画像に/へのリンクを追加
+  - elasticsearchへのデータ登録時、最大結果数を10万件に変更
+  - 合わせて、ReactiveList側でも、検索結果をelasticserachの設定に依存するよう修正
 
 - 2021/10/06
   - 変更:react_app/src/App.js, react_app/.env.template
