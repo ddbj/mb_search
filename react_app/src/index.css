@@ -85,6 +85,23 @@ code {
 .pointer:hover {
 	background-color: lightgray;
 }
+.download-link {
+	text-align:  right;
+	font-weight: bold;
+	margin-top:  0.5em;
+}
+.download-link a {
+	padding:         0.5em 1em 0.5em 1em;
+	color:           #333;
+	font-size:       11px;
+	background:      #88dd88;
+	border-radius:   50vh;
+	transition:      0.3s;
+	text-decoration: none;
+}
+.download-link a:hover {
+	background: #88ee88;
+}
 /*** �J���p ***/
 .flex-left {
 	display        : flex;

@@ -1,9 +1,10 @@
 # New
-- 2021/10/11
-  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass, data/regist.sh
-  - ヘッダ画像に/へのリンクを追加
-  - elasticsearchへのデータ登録時、最大結果数を10万件に変更
-  - 合わせて、ReactiveList側でも、検索結果をelasticserachの設定に依存するよう修正
+- 2021/10/13
+  - 変更:react_app/src/App.js, react_app/src/index.css, react_app/src/MetaDownload.css
+  - 表記を変更
+  - ファイルタブ、DL(data)を非表示に
+  - 結果にzipダウンロードのリンクを追加（jsonにdownloadURLが含まれている場合のみ表示）
+  - View sizeを10,50,100に変更 
 
 # 必要なもの
 
@@ -77,9 +78,15 @@ Owner is "apache:apache".
 - taxonomy treeに関して、階層が深すぎるので、現在は-ales(目)と-aceae(科)以外は無視している。
 
 # 履歴
+- 2021/10/13
+  - 変更:react_app/src/App.js, react_app/src/index.css, react_app/src/MetaDownload.css
+  - 表記を変更
+  - ファイルタブ、DL(data)を非表示に
+  - 結果にzipダウンロードのリンクを追加（jsonにdownloadURLが含まれている場合のみ表示）
+  - View sizeを10,50,100に変更 
 
 - 2021/10/11
-  - 変更:react_app/src/App.js, react_app/App.css, react_app/App.sass, data/regist.sh
+  - 変更:react_app/src/App.js, react_app/src/App.css, react_app/src/App.sass, data/regist.sh
   - ヘッダ画像に/へのリンクを追加
   - elasticsearchへのデータ登録時、最大結果数を10万件に変更
   - 合わせて、ReactiveList側でも、検索結果をelasticserachの設定に依存するよう修正

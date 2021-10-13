@@ -11,7 +11,11 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/10/11
+Last-Update: 2021/10/13
+ver0.97 表記を変更
+        Fileタブ、DL(data)を非表示。結果にダウンロードリンクを追加(downloadURLが含まれている場合のみ)
+        View sizeを10,50,100に変更
+
 ver0.963 ヘッダ画像に/へのリンクを追加
          ElasticSearchの結果を1万件上限を、ElasticSerach側の設定に依存するよう修正
 
@@ -73,13 +77,14 @@ class App extends Component
 
 	sampleFilterArray = [];
 	handleChange = null;
+	totalResults = null;
 
 	constructor(props)
 	{
 		super(props);
 
 		// state
-		this.state = { count: 0, file_count: 0, show_count: 5 };
+		this.state = { count: 0, file_count: 0, show_count: 10 };
 
 		// bind
 		this.reflectSelectedCount        = this.reflectSelectedCount.bind(this)
@@ -465,7 +470,7 @@ for(let i = 0; i < keys.length; i ++)
 						</section>
 		{/* 拡張子のフィルタ */}
 						<section className="filter-box">
-							<p className="title serif">File Format</p>
+							<p className="title serif">Data Format</p>
 							<div className="contents">
 								<MultiList
 									componentId  = "files_format"
@@ -484,7 +489,7 @@ for(let i = 0; i < keys.length; i ++)
 		{/* サンプル種のフィルタ */}
 						<section className="filter-box">
 							<div className="separate title">
-								<p className="serif">Samples</p>
+								<p className="serif"><i>Organism</i></p>
 								<div className="filter-countr"><span id="taxonomy_button" className="metadownload-button hidden" onClick={this.showTree}>≡</span></div>
 							</div>
 				{/* サンプル種の絞り込み用テキストボックス */}
@@ -493,7 +498,7 @@ for(let i = 0; i < keys.length; i ++)
 									componentId = "sample-filter"
 									dataField   = "taxonomy_names"
 									queryFormat = "and"
-									placeholder = "Filter for TaxNames"
+									placeholder = "filter"
 									autosuggest = {false}
 									className   = "sample-filter-textbox"
 								/>
@@ -605,26 +610,25 @@ for(let i = 0; i < keys.length; i ++)
 						<div className="functions">
 							<div className="project-file-style">
 								<span className="tab selected-tab serif"   id="switch2Project" onClick={this.switch2Project}>Study</span>
-								<span className="tab unselected-tab serif" id="switch2File"    onClick={this.switch2File}>File</span>
+								{/*<span className="tab unselected-tab serif" id="switch2File"    onClick={this.switch2File}>File</span>*/}
 							</div>
 							<div className="show-count">
-								<p className="label">Show Count</p>
-								<label htmlFor="show_count_5" ><input type="radio" id="show_count_5"  name="show_count" value="5"  onChange={this.changeShowCount} defaultChecked={true} />5</label>
-								<label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} />10</label>
-								<label htmlFor="show_count_20"><input type="radio" id="show_count_20" name="show_count" value="20" onChange={this.changeShowCount} />20</label>
+								<p className="label">View size</p>
+								<label htmlFor="show_count_10"><input type="radio" id="show_count_10" name="show_count" value="10" onChange={this.changeShowCount} defaultChecked={true} />10</label>
 								<label htmlFor="show_count_50"><input type="radio" id="show_count_50" name="show_count" value="50" onChange={this.changeShowCount} />50</label>
+								<label htmlFor="show_count_100"><input type="radio" id="show_count_100" name="show_count" value="100" onChange={this.changeShowCount} />100</label>
 							</div>
 						</div>
 		{/* 結果を操作するボタン群 */}
 						<div className="separate">
 							<div>
-								<span className="metadownload-button" onClick={this.selectAllCheckbox}  >Select All</span>
-								<span className="metadownload-button" onClick={this.deselectAllCheckbox}>Deselect All</span>
+								<span className="metadownload-button" onClick={this.selectAllCheckbox}  >Select all</span>
+								<span className="metadownload-button" onClick={this.deselectAllCheckbox}>Deselect all</span>
 							</div>
 							<div>
-								<span className="metadownload-button" onClick={this.showMetaSettings}>DL(Meta)</span>
-								<span className="metadownload-button" onClick={this.doDownload}      >DL(File)</span>
-								<span>{this.state.file_count} <span className="small">file(s)</span>/{this.state.count} <span className="small">selected.</span></span>
+								<span className="metadownload-button" onClick={this.showMetaSettings}>DL (meta)</span>
+								{/*<span className="metadownload-button" onClick={this.doDownload}      >DL (data)</span>*/}
+								<span>{this.state.count} <span className="small">selected</span>{/* ({this.state.file_count} <span className="small">files</span>)*/}</span>
 							</div>
 						</div>
 		{/* Metaダウンロード設定 */}
@@ -643,10 +647,13 @@ for(let i = 0; i < keys.length; i ++)
 								"and": ["meta_search","instruments","files_format","samples","file_or_project"]
 							}}
 							renderResultStats={
-								function(stats){
+								(stats) => {
+									if( this.totalResults === null)
+										this.totalResults = stats.numberOfResults;
+									let start = stats.currentPage * this.state.show_count;
 									return (
 										<div dangerouslySetInnerHTML = {{
-											__html: `<strong>${stats.numberOfResults}</strong> results, showing ${stats.currentPage*stats.displayedResults+1} to ${(stats.currentPage+1)*stats.displayedResults}`
+											__html: `<strong>${stats.numberOfResults}</strong> results out of ${this.totalResults} (showing ${start+1} to ${start+stats.displayedResults})`
 										}}></div>
 									)
 								}
@@ -669,6 +676,14 @@ for(let i = 0; i < keys.length; i ++)
 										data[i].detailURL  = "ID:" + data[i].id;
 									}
 								}
+								// ダウンロードURL
+								for(let i = 0; i < data.length; i ++){
+									//if(typeof data[i].donwloadURL !== 'undefined')
+									if(data[i].donwloadURL !== undefined)
+										data[i].downloadLink = '<a href="' + data[i].downloadURL + '" download>data download</a>';
+									else
+										data[i].downloadLink = '';
+								}
 								return (
 									<ResultListWrapper className="result-table">
 									{
@@ -686,6 +701,7 @@ for(let i = 0; i < keys.length; i ++)
 														<ResultList.Description></ResultList.Description>
 													</div>
 												<span className="small" dangerouslySetInnerHTML={{__html:item.project_label}} />
+												<div dangerouslySetInnerHTML = {{__html: item.downloadLink}} className="download-link"></div>
 												</label>
 											</ResultList.Content>
 											</ResultList>

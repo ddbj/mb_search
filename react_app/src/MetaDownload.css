@@ -15,7 +15,7 @@ summary#meta-summary {
 	position     : relative;
 	display      : inline-block;
 	border       : solid 1px black;
-	margin-right : 2.8em;
+	margin-right : 0em;
 	padding      : 10px;
 	margin-top   : 1em;
 	border-radius: 5px;
@@ -25,7 +25,7 @@ summary#meta-summary {
 	position     : absolute;
 	top          : -30px;
 	right        : 0%;
-	margin-right : 10em;
+	margin-right : 5.5em;
 	border       : 15px solid transparent;
 	border-bottom: 15px solid black;
 	z-index      : 1;
@@ -35,7 +35,7 @@ summary#meta-summary {
 	position     : absolute;
 	top          : -28px;
 	right        : 0%;
-	margin-right : 10.05em;
+	margin-right : 5.55em;
 	border       : 14px solid transparent;
 	border-bottom: 14px solid white;
 	z-index      : 2;
