@@ -11,7 +11,9 @@ import './App.css';
 const {ResultListWrapper} = ReactiveList;
 
 /*
-Last-Update: 2021/10/13
+Last-Update: 2021/10/14
+ver0.98 Organismのリストからbold体指定をはずす
+
 ver0.97 表記を変更
         Fileタブ、DL(data)を非表示。結果にダウンロードリンクを追加(downloadURLが含まれている場合のみ)
         View sizeを10,50,100に変更
@@ -489,7 +491,7 @@ for(let i = 0; i < keys.length; i ++)
 		{/* サンプル種のフィルタ */}
 						<section className="filter-box">
 							<div className="separate title">
-								<p className="serif"><i>Organism</i></p>
+								<p className="serif">Organism</p>
 								<div className="filter-countr"><span id="taxonomy_button" className="metadownload-button hidden" onClick={this.showTree}>≡</span></div>
 							</div>
 				{/* サンプル種の絞り込み用テキストボックス */}
@@ -550,7 +552,7 @@ for(let i = 0; i < keys.length; i ++)
 													<li key={item.key} htmlFor={item.key}>
 														<input type="checkbox" id={item.key} value={item.key} name="samples" onChange={this.changeSampleFilter} defaultChecked={item.checked} />
 														<label for={item.key} className="sample-label">
-															<span className="label">{item.key}</span>
+															<span className="label unbold">{item.key}</span>
 															<span className="count">{item.doc_count}</span>
 														</label>
 													</li>

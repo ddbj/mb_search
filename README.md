@@ -1,4 +1,8 @@
 # New
+- 2021/10/14
+  - 変更:react_app/src/App.js, react_app/src/index.css
+  - Organismのリストからbold体指定を解除
+
 - 2021/10/13
   - 変更:react_app/src/App.js, react_app/src/index.css, react_app/src/MetaDownload.css
   - 表記を変更
@@ -78,6 +82,10 @@ Owner is "apache:apache".
 - taxonomy treeに関して、階層が深すぎるので、現在は-ales(目)と-aceae(科)以外は無視している。
 
 # 履歴
+- 2021/10/14
+  - 変更:react_app/src/App.js, react_app/src/index.css
+  - Organismのリストからbold体指定を解除
+
 - 2021/10/13
   - 変更:react_app/src/App.js, react_app/src/index.css, react_app/src/MetaDownload.css
   - 表記を変更

@@ -102,6 +102,9 @@ code {
 .download-link a:hover {
 	background: #88ee88;
 }
+.unbold {
+	font-weight: normal;
+}
 /*** �J���p ***/
 .flex-left {
 	display        : flex;
